@@ -20,6 +20,7 @@ import android.os.Handler;
 import android.util.Log;
 
 
+import com.example.xie.ClientApplication;
 import com.im.sdk.protocal.Message;
 import com.im.sdk.protocal.ProtobufDecoder;
 import com.im.sdk.protocal.ProtobufEncoder;
@@ -42,35 +43,48 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 
+/***
+ * 处理所有的消息处事件
+ */
 public final class IMClient implements ClientHandler.IMEventListener {
 
     public String TAG = getClass().getSimpleName();
 
-
+    /**
+     * 服务端地址
+     */
     static final String HOST = "192.168.1.3";
+    /**
+     * 服务端端口
+     */
     static final int PORT = 53456;
-
+    /**
+     * 消息事件监听集
+     */
+    private static final List<ClientHandler.IMEventListener> mIMEventListener = new ArrayList<ClientHandler.IMEventListener>();
     private static IMClient mInstance;
-    private static final List<ClientHandler.IMEventListener> mListeners = new ArrayList<ClientHandler.IMEventListener>();
-    Bootstrap bootstrap;
-    EventLoopGroup loopGroup;
-    public Channel channel;
-    ClientHandler handler;
+    private MessageHandler mMessageHandler;
+    private Context context = ClientApplication.instance();
+    private Bootstrap bootstrap;
+    private EventLoopGroup loopGroup;
+    private Channel channel;
+
+    private ClientHandler handler;
     private Handler mUIhander;
     private ExecutorService executor;
-    private static Context context;
-    private static MessageHandler mMessageHandler;
-    private String account ="123456";
+
+    private String account = "123456";
+
     private IMClient() {
         init();
     }
 
-    public static void init(Context ctx){
+    public static void init(Context ctx) {
         if (mInstance == null) {
             mInstance = new IMClient();
-            context = ctx.getApplicationContext();
         }
     }
+
     public static IMClient instance() {
         return mInstance;
     }
@@ -98,6 +112,12 @@ public final class IMClient implements ClientHandler.IMEventListener {
                 });
     }
 
+    public boolean reconnect(){
+        //TODO SOMETHING
+        connect();
+        return false;
+    }
+
     public void connect() {
 
         executor.execute(new Runnable() {
@@ -109,14 +129,13 @@ public final class IMClient implements ClientHandler.IMEventListener {
                     return;
                 }
                 Log.i(TAG, "启动连接服务器");
-                // Start the client.
                 ChannelFuture f = null;
                 try {
                     f = bootstrap.connect(HOST, PORT).sync();
-                    f.addListener(new ChannelFutureListener(){
+                    f.addListener(new ChannelFutureListener() {
                         @Override
                         public void operationComplete(ChannelFuture channelFuture) throws Exception {
-                            Log.w(TAG,"绑定服务结果:"+(channelFuture.isSuccess()?"成功":"失败:"+channelFuture.cause().toString()));
+                            Log.w(TAG, "绑定服务结果:" + (channelFuture.isSuccess() ? "成功" : "失败:" + channelFuture.cause().toString()));
                         }
                     });
 
@@ -139,7 +158,7 @@ public final class IMClient implements ClientHandler.IMEventListener {
     }
 
     public void sendMessage(final Message.Data.Builder msg) {
-        mMessageHandler.handSendMsg(executor,channel,msg);
+        mMessageHandler.handSendMsg(executor, channel, msg);
     }
 
     public void disconnect() {
@@ -147,12 +166,11 @@ public final class IMClient implements ClientHandler.IMEventListener {
             channel.close();
         }
         channel = null;
-
     }
 
     public void destroy() {
         disconnect();
-        mListeners.clear();
+        mIMEventListener.clear();
     }
 
     public boolean isConnected() {
@@ -165,6 +183,7 @@ public final class IMClient implements ClientHandler.IMEventListener {
     @Override
     public void onReceiveMessage(Object message) {
         Log.i(TAG, " onReceiveMessage ");
+
         notifyListener(message, EVENT_RECEIVE_MESSAGE);
     }
 
@@ -172,6 +191,7 @@ public final class IMClient implements ClientHandler.IMEventListener {
     public void onConnected() {
         Log.i(TAG, " onConnected ");
         notifyListener(null, EVENT_CONNECTED);
+
     }
 
     @Override
@@ -196,11 +216,16 @@ public final class IMClient implements ClientHandler.IMEventListener {
     }
 
 
+    /**
+     * 通知所有事件监听器
+     * @param message
+     * @param EVENT
+     */
     private void notifyListener(final Object message, final int EVENT) {
         mUIhander.post(new Runnable() {
             @Override
             public void run() {
-                for (ClientHandler.IMEventListener listener : mListeners) {
+                for (ClientHandler.IMEventListener listener : mIMEventListener) {
                     if (EVENT == EVENT_CONNECTED) {
                         Log.i(TAG, "连接成功能");
                         listener.onConnected();
@@ -227,14 +252,14 @@ public final class IMClient implements ClientHandler.IMEventListener {
     }
 
     public static void addEventListener(ClientHandler.IMEventListener listener) {
-        mListeners.add(listener);
+        mIMEventListener.add(listener);
     }
 
     public static void removeEventListener(ClientHandler.IMEventListener listener) {
-        mListeners.remove(listener);
+        mIMEventListener.remove(listener);
     }
 
     public void clearEventListener() {
-        mListeners.clear();
+        mIMEventListener.clear();
     }
 }

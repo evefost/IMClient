@@ -19,7 +19,7 @@ import io.netty.channel.ChannelFuture;
 
 /**
  * Created by xie on 2016/1/31.
- * 专门处理所有消息的发送接收
+ * 处理所有消息的发送接收
  */
 public class MessageHandler {
 
@@ -28,13 +28,12 @@ public class MessageHandler {
     Map<Long, Message.Data.Builder> mQueue = new HashMap<Long, Message.Data.Builder>();
     public static long timeOut = 30 * 1000;
     private static MessageHandler instance = new MessageHandler();
-    private  Context  context = ClientApplication.instance();
+    private Context context = ClientApplication.instance();
 
     private Handler timerHandler = new Handler();
     private boolean isStop = false;
 
     private MessageHandler() {
-
     }
 
     public static MessageHandler instance() {
@@ -43,7 +42,7 @@ public class MessageHandler {
 
 
     private void loopMessage() {
-        if(isStop){
+        if (isStop) {
             return;
         }
         timerHandler.postDelayed(new Runnable() {
@@ -67,31 +66,34 @@ public class MessageHandler {
         }
     }
 
-    /**缓存消息，发送成功或失败,超时，时移除*/
+    /**
+     * 缓存消息，发送成功或失败,超时，时移除
+     */
     public void push(Message.Data.Builder msg) {
-        if(msg != null && msg.getCreateTime() !=0L ){
-            mQueue.put(msg.getCreateTime(),msg);
+        if (msg != null && msg.getCreateTime() != 0L) {
+            mQueue.put(msg.getCreateTime(), msg);
         }
     }
 
     public Message.Data.Builder pop(Long key) {
-        if(key != null){
+        if (key != null) {
             return mQueue.remove(key);
         }
         return null;
     }
 
     public void handSendMsg(ExecutorService executor, final Channel channel, final Message.Data.Builder msg) {
+        //必须设置发送时间
+        msg.setCreateTime(System.currentTimeMillis());
+        proccessSendMessage(msg);
+        push(msg);
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                //必须设置发送时间
-                msg.setCreateTime(System.currentTimeMillis());
-                proccessSendMessage(msg);
-                push(msg);
+
                 if (IMClient.instance().isConnected()) {
                     try {
-                        Log.e(TAG, "发送中...time:"+msg.getCreateTime());
+                        Log.e(TAG, "发送中...time:" + msg.getCreateTime());
                         ChannelFuture channelFuture = channel.writeAndFlush(msg);
                     } catch (Exception e) {
                         Log.e(TAG, "发送失败:" + e.toString());
@@ -99,30 +101,33 @@ public class MessageHandler {
                         IMClient.instance().onSendFailure(msg);
                     }
                 } else {
-                    Log.i(TAG, "服务器已经断开");
-                    IMClient.instance().onSendFailure(msg);
+                    Log.i(TAG, "服务器已经断开,重连");
+                    boolean stopReconnect = IMClient.instance().reconnect();
+                    if(stopReconnect){
+                        IMClient.instance().onSendFailure(msg);
+                    }
                 }
             }
         });
     }
 
-    private  void proccessSendMessage(Message.Data.Builder data) {
-        Log.i(TAG,"发送消息");
+    private void proccessSendMessage(Message.Data.Builder data) {
+        Log.i(TAG, "发送消息");
         switch (data.getCmd()) {
             case Message.Data.Cmd.LOGIN_VALUE:
-                Log.i(TAG, "登录["+data.getAccount());
+                Log.i(TAG, "登录[" + data.getAccount());
                 break;
             case Message.Data.Cmd.HEARTBEAT_VALUE:
-                Log.i(TAG, "心跳消息 time:"+data.getCreateTime());
+                Log.i(TAG, "心跳消息 time:" + data.getCreateTime());
                 break;
             case Message.Data.Cmd.CHAT_MESSAGE_VALUE:
-                Log.i(TAG, "聊天消息 ["+data.getContent());
+                Log.i(TAG, "聊天消息 [" + data.getContent());
                 break;
         }
     }
 
     public void handReceiveMsg(Message.Data data) {
-        Log.i(TAG,"处理收到消息");
+        Log.i(TAG, "处理收到消息");
         switch (data.getCmd()) {
             case Message.Data.Cmd.LOGIN_VALUE:
                 if (TextUtils.isEmpty(data.getAccount())) {
@@ -137,7 +142,7 @@ public class MessageHandler {
                 // TODO: 2016/1/31
                 break;
             case Message.Data.Cmd.HEARTBEAT_VALUE:
-                Log.i(TAG, "服务端回应心跳消息:"+data.getCreateTime());
+                Log.i(TAG, "服务端回应心跳消息:" + data.getCreateTime());
                 //移除心跳消息
                 pop(data.getCreateTime());
                 break;
@@ -148,7 +153,7 @@ public class MessageHandler {
             case Message.Data.Cmd.CHAT_MESSAGE_ECHO_VALUE:
 
                 Message.Data.Builder pop = pop(data.getCreateTime());
-                Log.i(TAG, "消息回应,发送成功 createTime:"+data.getCreateTime()+"=="+pop.getContent());
+                Log.i(TAG, "消息回应,发送成功 createTime:" + data.getCreateTime() + "==" + pop.getContent());
                 IMClient.instance().onSendSucceed(pop);
                 break;
         }
