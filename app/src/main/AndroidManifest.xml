@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/GlobeTheme" >
         <activity
-            android:name="com.custom.protocal.IMTestActivity"
+            android:name="com.example.xie.IMTestActivity"
             android:label="@string/app_name"
             >
             <intent-filter>
