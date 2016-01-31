@@ -181,10 +181,16 @@ public final class IMClient implements ClientHandler.IMEventListener {
     }
 
     @Override
-    public void onReceiveMessage(Object message) {
+    public void onReceiveMessage(final Object message) {
         Log.i(TAG, " onReceiveMessage ");
 
         notifyListener(message, EVENT_RECEIVE_MESSAGE);
+        mUIhander.post(new Runnable() {
+            @Override
+            public void run() {
+                mMessageHandler.handReceiveMsg((Message.Data) message);
+            }
+        });
     }
 
     @Override
@@ -235,7 +241,6 @@ public final class IMClient implements ClientHandler.IMEventListener {
                     } else if (EVENT == EVENT_RECEIVE_MESSAGE) {
                         Log.i(TAG, "收到消息");
                         listener.onReceiveMessage(message);
-                        mMessageHandler.handReceiveMsg((Message.Data) message);
                     } else if (EVENT == EVENT_SEND_FAILURE) {
                         Log.i(TAG, "发送失败");
                         listener.onSendFailure(message);
