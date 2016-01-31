@@ -1,0 +1,240 @@
+/*
+ * Copyright 2012 The Netty Project
+ *
+ * The Netty Project licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+package com.im.sdk.core;
+
+import android.content.Context;
+import android.os.Handler;
+import android.util.Log;
+
+
+import com.im.sdk.protocal.Message;
+import com.im.sdk.protocal.ProtobufDecoder;
+import com.im.sdk.protocal.ProtobufEncoder;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
+
+
+public final class IMClient implements ClientHandler.IMEventListener {
+
+    public String TAG = getClass().getSimpleName();
+
+
+    static final String HOST = "192.168.1.3";
+    static final int PORT = 53456;
+
+    private static IMClient mInstance;
+    private static final List<ClientHandler.IMEventListener> mListeners = new ArrayList<ClientHandler.IMEventListener>();
+    Bootstrap bootstrap;
+    EventLoopGroup loopGroup;
+    public Channel channel;
+    ClientHandler handler;
+    private Handler mUIhander;
+    private ExecutorService executor;
+    private static Context context;
+    private static MessageHandler mMessageHandler;
+    private String account ="123456";
+    private IMClient() {
+        init();
+    }
+
+    public static void init(Context ctx){
+        if (mInstance == null) {
+            mInstance = new IMClient();
+            context = ctx.getApplicationContext();
+        }
+    }
+    public static IMClient instance() {
+        return mInstance;
+    }
+
+    private void init() {
+
+        Log.i(TAG, "初始化连接");
+        executor = Executors.newFixedThreadPool(3);
+        mUIhander = new Handler();
+        handler = new ClientHandler(this);
+        mMessageHandler = MessageHandler.instance();
+        loopGroup = new NioEventLoopGroup();
+        bootstrap = new Bootstrap();
+        bootstrap.group(loopGroup)
+                .channel(NioSocketChannel.class)
+                .option(ChannelOption.TCP_NODELAY, true)
+                .handler(new ChannelInitializer<SocketChannel>() {
+                    @Override
+                    public void initChannel(SocketChannel ch) throws Exception {
+                        ChannelPipeline p = ch.pipeline();
+                        p.addLast(new ProtobufDecoder(Message.Data.getDefaultInstance()));
+                        p.addLast(new ProtobufEncoder());
+                        p.addLast(handler);
+                    }
+                });
+    }
+
+    public void connect() {
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                if (channel != null && channel.isActive()) {
+                    Log.i(TAG, "已连接服务器");
+                    return;
+                }
+                Log.i(TAG, "启动连接服务器");
+                // Start the client.
+                ChannelFuture f = null;
+                try {
+                    f = bootstrap.connect(HOST, PORT).sync();
+                    f.addListener(new ChannelFutureListener(){
+                        @Override
+                        public void operationComplete(ChannelFuture channelFuture) throws Exception {
+                            Log.w(TAG,"绑定服务结果:"+(channelFuture.isSuccess()?"成功":"失败:"+channelFuture.cause().toString()));
+                        }
+                    });
+
+                    channel = f.channel();
+                    // Wait until the connection is closed.
+                    f.channel().closeFuture().sync();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.i(TAG, "connect EX" + e.toString());
+                    onConnectFailure(e.toString());
+                } finally {
+                    // Shut down the event loop to terminate all threads.
+                    Log.i(TAG, " Shut down the event loop to terminate all threads.");
+//                    loopGroup.shutdownGracefully();
+                }
+            }
+        });
+
+
+    }
+
+    public void sendMessage(final Message.Data.Builder msg) {
+        mMessageHandler.handSendMsg(executor,channel,msg);
+    }
+
+    public void disconnect() {
+        if (channel != null && channel.isActive()) {
+            channel.close();
+        }
+        channel = null;
+
+    }
+
+    public void destroy() {
+        disconnect();
+        mListeners.clear();
+    }
+
+    public boolean isConnected() {
+        if (channel != null && channel.isActive()) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onReceiveMessage(Object message) {
+        Log.i(TAG, " onReceiveMessage ");
+        notifyListener(message, EVENT_RECEIVE_MESSAGE);
+    }
+
+    @Override
+    public void onConnected() {
+        Log.i(TAG, " onConnected ");
+        notifyListener(null, EVENT_CONNECTED);
+    }
+
+    @Override
+    public void onDisconnected() {
+        Log.i(TAG, "onDisconnected ");
+        notifyListener(null, EVENT_DISCONNECTED);
+    }
+
+    @Override
+    public void onSendFailure(Object msg) {
+        notifyListener(msg, EVENT_SEND_FAILURE);
+    }
+
+    @Override
+    public void onSendSucceed(Object msg) {
+        notifyListener(msg, EVENT_SEND_SUCCESS);
+    }
+
+    @Override
+    public void onConnectFailure(String msg) {
+        notifyListener(msg, EVENT_CONNECT_FAILURE);
+    }
+
+
+    private void notifyListener(final Object message, final int EVENT) {
+        mUIhander.post(new Runnable() {
+            @Override
+            public void run() {
+                for (ClientHandler.IMEventListener listener : mListeners) {
+                    if (EVENT == EVENT_CONNECTED) {
+                        Log.i(TAG, "连接成功能");
+                        listener.onConnected();
+                    } else if (EVENT == EVENT_DISCONNECTED) {
+                        Log.i(TAG, "服务器已断开");
+                        listener.onDisconnected();
+                    } else if (EVENT == EVENT_RECEIVE_MESSAGE) {
+                        Log.i(TAG, "收到消息");
+                        listener.onReceiveMessage(message);
+                        mMessageHandler.handReceiveMsg((Message.Data) message);
+                    } else if (EVENT == EVENT_SEND_FAILURE) {
+                        Log.i(TAG, "发送失败");
+                        listener.onSendFailure(message);
+                    } else if (EVENT == EVENT_SEND_SUCCESS) {
+                        Log.i(TAG, "发送成功");
+                        listener.onSendSucceed(message);
+                    } else if (EVENT == EVENT_CONNECT_FAILURE) {
+                        Log.i(TAG, "连接失败" + message.toString());
+                        listener.onConnectFailure((String) message);
+                    }
+                }
+            }
+        });
+    }
+
+    public static void addEventListener(ClientHandler.IMEventListener listener) {
+        mListeners.add(listener);
+    }
+
+    public static void removeEventListener(ClientHandler.IMEventListener listener) {
+        mListeners.remove(listener);
+    }
+
+    public void clearEventListener() {
+        mListeners.clear();
+    }
+}
