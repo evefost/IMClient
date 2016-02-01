@@ -181,16 +181,9 @@ public final class IMClient implements ClientHandler.IMEventListener {
     }
 
     @Override
-    public void onReceiveMessage(final Object message) {
+    public void onReceiveMessage(final Message.Data  message) {
         Log.i(TAG, " onReceiveMessage ");
-
         notifyListener(message, EVENT_RECEIVE_MESSAGE);
-        mUIhander.post(new Runnable() {
-            @Override
-            public void run() {
-                mMessageHandler.handReceiveMsg((Message.Data) message);
-            }
-        });
     }
 
     @Override
@@ -207,12 +200,12 @@ public final class IMClient implements ClientHandler.IMEventListener {
     }
 
     @Override
-    public void onSendFailure(Object msg) {
+    public void onSendFailure( Message.Data.Builder  msg) {
         notifyListener(msg, EVENT_SEND_FAILURE);
     }
 
     @Override
-    public void onSendSucceed(Object msg) {
+    public void onSendSucceed( Message.Data.Builder  msg) {
         notifyListener(msg, EVENT_SEND_SUCCESS);
     }
 
@@ -239,14 +232,14 @@ public final class IMClient implements ClientHandler.IMEventListener {
                         Log.i(TAG, "服务器已断开");
                         listener.onDisconnected();
                     } else if (EVENT == EVENT_RECEIVE_MESSAGE) {
-                        Log.i(TAG, "收到消息");
-                        listener.onReceiveMessage(message);
+                        Log.i(TAG, "收到消息，处理各类消息");
+                        mMessageHandler.handReceiveMsg((Message.Data) message,listener);
                     } else if (EVENT == EVENT_SEND_FAILURE) {
                         Log.i(TAG, "发送失败");
-                        listener.onSendFailure(message);
+                        listener.onSendFailure(( Message.Data.Builder) message);
                     } else if (EVENT == EVENT_SEND_SUCCESS) {
                         Log.i(TAG, "发送成功");
-                        listener.onSendSucceed(message);
+                        listener.onSendSucceed(( Message.Data.Builder) message);
                     } else if (EVENT == EVENT_CONNECT_FAILURE) {
                         Log.i(TAG, "连接失败" + message.toString());
                         listener.onConnectFailure((String) message);

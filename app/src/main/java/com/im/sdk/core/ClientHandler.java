@@ -17,6 +17,8 @@ package com.im.sdk.core;
 
 import android.util.Log;
 
+import com.im.sdk.protocal.Message;
+
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
@@ -47,7 +49,7 @@ public class ClientHandler extends ChannelHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         Log.i(TAG, "channelRead 收到消息");
         if (mListener != null) {
-            mListener.onReceiveMessage(msg);
+            mListener.onReceiveMessage((Message.Data) msg);
         }
     }
 
@@ -72,7 +74,7 @@ public class ClientHandler extends ChannelHandlerAdapter {
     /**
      * 所有事件监听
      */
-    public interface IMEventListener extends IMHandlerListener<Object> {
+    public interface IMEventListener extends IMHandlerListener {
 
         public static final int EVENT_RECEIVE_MESSAGE = 0;
         public static final int EVENT_CONNECTED = 1;
@@ -81,17 +83,17 @@ public class ClientHandler extends ChannelHandlerAdapter {
         public static final int EVENT_SEND_SUCCESS = 4;
         public static final int EVENT_CONNECT_FAILURE = 5;
 
-        public void onSendFailure(Object msg);
+        public void onSendFailure(Message.Data.Builder msg);
 
-        public void onSendSucceed(Object msg);
+        public void onSendSucceed(Message.Data.Builder msg);
 
         public void onConnectFailure(String msg);
 
     }
 
-    public interface IMHandlerListener<T> {
+    public interface IMHandlerListener {
 
-        public void onReceiveMessage(T msg);
+        public void onReceiveMessage(Message.Data msg);
 
         public void onConnected();
 

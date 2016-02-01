@@ -94,6 +94,15 @@ public final class Message {
      * <code>optional int32 port = 7;</code>
      */
     int getPort();
+
+    /**
+     * <code>optional bool login_success = 8;</code>
+     */
+    boolean hasLoginSuccess();
+    /**
+     * <code>optional bool login_success = 8;</code>
+     */
+    boolean getLoginSuccess();
   }
   /**
    * Protobuf type {@code com.im.sdk.protocal.Data}
@@ -114,6 +123,7 @@ public final class Message {
       content_ = "";
       ip_ = "";
       port_ = 0;
+      loginSuccess_ = false;
     }
 
     @Override
@@ -180,6 +190,11 @@ public final class Message {
             case 56: {
               bitField0_ |= 0x00000040;
               port_ = input.readInt32();
+              break;
+            }
+            case 64: {
+              bitField0_ |= 0x00000080;
+              loginSuccess_ = input.readBool();
               break;
             }
           }
@@ -541,6 +556,21 @@ public final class Message {
       return port_;
     }
 
+    public static final int LOGIN_SUCCESS_FIELD_NUMBER = 8;
+    private boolean loginSuccess_;
+    /**
+     * <code>optional bool login_success = 8;</code>
+     */
+    public boolean hasLoginSuccess() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional bool login_success = 8;</code>
+     */
+    public boolean getLoginSuccess() {
+      return loginSuccess_;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -582,6 +612,9 @@ public final class Message {
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         output.writeInt32(7, port_);
       }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeBool(8, loginSuccess_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -618,6 +651,10 @@ public final class Message {
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(7, port_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(8, loginSuccess_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSerializedSize = size;
@@ -745,6 +782,8 @@ public final class Message {
         bitField0_ = (bitField0_ & ~0x00000020);
         port_ = 0;
         bitField0_ = (bitField0_ & ~0x00000040);
+        loginSuccess_ = false;
+        bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
 
@@ -797,6 +836,10 @@ public final class Message {
           to_bitField0_ |= 0x00000040;
         }
         result.port_ = port_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.loginSuccess_ = loginSuccess_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -841,6 +884,9 @@ public final class Message {
         }
         if (other.hasPort()) {
           setPort(other.getPort());
+        }
+        if (other.hasLoginSuccess()) {
+          setLoginSuccess(other.getLoginSuccess());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -1276,6 +1322,38 @@ public final class Message {
         return this;
       }
 
+      private boolean loginSuccess_ ;
+      /**
+       * <code>optional bool login_success = 8;</code>
+       */
+      public boolean hasLoginSuccess() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>optional bool login_success = 8;</code>
+       */
+      public boolean getLoginSuccess() {
+        return loginSuccess_;
+      }
+      /**
+       * <code>optional bool login_success = 8;</code>
+       */
+      public Builder setLoginSuccess(boolean value) {
+        bitField0_ |= 0x00000080;
+        loginSuccess_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool login_success = 8;</code>
+       */
+      public Builder clearLoginSuccess() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        loginSuccess_ = false;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:com.im.sdk.protocal.Data)
     }
 
@@ -1333,14 +1411,14 @@ public final class Message {
       descriptor;
   static {
     String[] descriptorData = {
-      "\n\rmessage.proto\022\023com.im.sdk.protocal\"\330\001\n" +
+      "\n\rmessage.proto\022\023com.im.sdk.protocal\"\357\001\n" +
       "\004Data\022\013\n\003cmd\030\001 \002(\005\022\023\n\013create_time\030\002 \002(\003\022" +
       "\n\n\002id\030\003 \001(\t\022\017\n\007account\030\004 \001(\t\022\017\n\007content\030" +
-      "\005 \001(\t\022\n\n\002ip\030\006 \001(\t\022\014\n\004port\030\007 \001(\005\"f\n\003Cmd\022\t" +
-      "\n\005LOGIN\020\000\022\n\n\006LOGOUT\020\001\022\020\n\014OTHER_LOGGIN\020\002\022" +
-      "\r\n\tHEARTBEAT\020\003\022\020\n\014CHAT_MESSAGE\020\004\022\025\n\021CHAT" +
-      "_MESSAGE_ECHO\020\005B\036\n\023com.im.sdk.protocalB\007" +
-      "Message"
+      "\005 \001(\t\022\n\n\002ip\030\006 \001(\t\022\014\n\004port\030\007 \001(\005\022\025\n\rlogin" +
+      "_success\030\010 \001(\010\"f\n\003Cmd\022\t\n\005LOGIN\020\000\022\n\n\006LOGO" +
+      "UT\020\001\022\020\n\014OTHER_LOGGIN\020\002\022\r\n\tHEARTBEAT\020\003\022\020\n" +
+      "\014CHAT_MESSAGE\020\004\022\025\n\021CHAT_MESSAGE_ECHO\020\005B\036" +
+      "\n\023com.im.sdk.protocalB\007Message"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -1359,7 +1437,7 @@ public final class Message {
     internal_static_com_im_sdk_protocal_Data_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_com_im_sdk_protocal_Data_descriptor,
-        new String[] { "Cmd", "CreateTime", "Id", "Account", "Content", "Ip", "Port", });
+        new String[] { "Cmd", "CreateTime", "Id", "Account", "Content", "Ip", "Port", "LoginSuccess", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

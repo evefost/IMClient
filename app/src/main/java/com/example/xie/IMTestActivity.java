@@ -80,17 +80,19 @@ public class IMTestActivity extends Activity implements ClientHandler.IMEventLis
     }
 
     @Override
-    public void onReceiveMessage(Object message) {
+    public void onReceiveMessage(Message.Data msg) {
 
-        Message.Data data = (Message.Data) message;
-        Log.i(TAG,"data cmd["+data.getCmd()+"]id["+data.getId()+"]username["+data.getContent());
-        if(data.getCmd() == Message.Data.Cmd.LOGIN_VALUE&& TextUtils.isEmpty(data.getAccount())){
+        Log.i(TAG,"data cmd["+msg.getCmd()+"]id["+msg.getId()+"]username["+msg.getContent());
+        if(msg.getCmd() == Message.Data.Cmd.LOGIN_VALUE&& TextUtils.isEmpty(msg.getAccount())){
             //未登录，登录
             Log.i(TAG,"未登录，登录");
             Message.Data.Builder accountInfo = Message.Data.newBuilder();
             accountInfo.setCmd(Message.Data.Cmd.LOGIN_VALUE);
             accountInfo.setAccount("xieyang123");
             IMClient.instance().sendMessage(accountInfo);
+        }
+        if(msg.getCmd() == Message.Data.Cmd.LOGIN_VALUE&& !TextUtils.isEmpty(msg.getAccount())){
+            Log.i(TAG,"登录成功");
         }
     }
 
@@ -108,13 +110,20 @@ public class IMTestActivity extends Activity implements ClientHandler.IMEventLis
     }
 
     @Override
-    public void onSendFailure(Object msg) {
+    public void onSendFailure( Message.Data.Builder msg) {
         Log.i(TAG, "onSendFailure");
+        if(msg.getCmd() == Message.Data.Cmd.LOGIN_VALUE){
+
+            Log.i(TAG,"登录失败");
+        }
     }
 
     @Override
-    public void onSendSucceed(Object msg) {
+    public void onSendSucceed( Message.Data.Builder msg) {
         Log.i(TAG, "onSendSucceed");
+        if(msg.getCmd() == Message.Data.Cmd.LOGIN_VALUE){
+            Log.i(TAG,msg.getLoginSuccess()?"登录成功":"登录失败:"+msg.getContent());
+        }
     }
 
     @Override

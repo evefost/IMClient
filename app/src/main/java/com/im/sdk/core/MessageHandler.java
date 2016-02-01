@@ -98,13 +98,20 @@ public class MessageHandler {
                     } catch (Exception e) {
                         Log.e(TAG, "发送失败:" + e.toString());
                         pop(msg.getCreateTime());
-                        IMClient.instance().onSendFailure(msg);
+                        if (msg.getCmd() != Message.Data.Cmd.HEARTBEAT_VALUE) {
+                            //心跳消息不用通知
+                            IMClient.instance().onSendFailure(msg);
+                        }
+
                     }
                 } else {
                     Log.i(TAG, "服务器已经断开,重连");
                     boolean stopReconnect = IMClient.instance().reconnect();
-                    if(stopReconnect){
-                        IMClient.instance().onSendFailure(msg);
+                    if (stopReconnect) {
+                        if (msg.getCmd() != Message.Data.Cmd.HEARTBEAT_VALUE) {
+                            //心跳消息不用通知
+                            IMClient.instance().onSendFailure(msg);
+                        }
                     }
                 }
             }
@@ -112,7 +119,7 @@ public class MessageHandler {
     }
 
     private void proccessSendMessage(Message.Data.Builder data) {
-        Log.i(TAG, "发送消息");
+        Log.i(TAG, "处理发送消息===========>>==========>>");
         switch (data.getCmd()) {
             case Message.Data.Cmd.LOGIN_VALUE:
                 Log.i(TAG, "登录[" + data.getAccount());
@@ -126,32 +133,37 @@ public class MessageHandler {
         }
     }
 
-    public void handReceiveMsg(Message.Data data) {
-        Log.i(TAG, "处理收到消息");
+    public void handReceiveMsg(Message.Data data, ClientHandler.IMEventListener listener) {
+        Log.i(TAG, "处理收到消息<<===========<<===========");
         switch (data.getCmd()) {
             case Message.Data.Cmd.LOGIN_VALUE:
                 if (TextUtils.isEmpty(data.getAccount())) {
-                    Log.i(TAG, "服务端登录请求 msg[" + data.getContent() + "] ip[" + data.getIp() + "]port[" + data.getPort());
+                    Log.i(TAG, "服务端登录请求 msg[" + data.getContent() );
+                    listener.onReceiveMessage(data);
                 } else {
-                    Log.i(TAG, "登录成功 account[" + data.getAccount() + "]ip[" + data.getIp() + "]port[" + data.getPort());
+                    Log.i(TAG, "登录结果:"+data.getLoginSuccess());
+                    Log.i(TAG, data.getContent() + " time" + data.getCreateTime());
                     HeartBeatManager.instance().startHeartBeat();
+                    Message.Data.Builder pop = pop(data.getCreateTime());
+                    pop.setLoginSuccess(data.getLoginSuccess());
+                    pop.setContent(data.getContent());
+                    IMClient.instance().onSendSucceed(pop);
                 }
                 break;
             case Message.Data.Cmd.OTHER_LOGGIN_VALUE:
                 Log.i(TAG, "帐号别处登录");
-                // TODO: 2016/1/31
+                listener.onReceiveMessage(data);
                 break;
             case Message.Data.Cmd.HEARTBEAT_VALUE:
-                Log.i(TAG, "服务端回应心跳消息:" + data.getCreateTime());
+                Log.i(TAG, "服务端回应的心跳消息:" + data.getCreateTime());
                 //移除心跳消息
                 pop(data.getCreateTime());
                 break;
             case Message.Data.Cmd.CHAT_MESSAGE_VALUE:
                 Log.i(TAG, "收到聊天消息");
-                // TODO: 2016/1/31
+                listener.onReceiveMessage(data);
                 break;
             case Message.Data.Cmd.CHAT_MESSAGE_ECHO_VALUE:
-
                 Message.Data.Builder pop = pop(data.getCreateTime());
                 Log.i(TAG, "消息回应,发送成功 createTime:" + data.getCreateTime() + "==" + pop.getContent());
                 IMClient.instance().onSendSucceed(pop);
