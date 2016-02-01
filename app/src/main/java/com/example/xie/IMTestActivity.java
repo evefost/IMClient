@@ -18,16 +18,13 @@ import com.im.sdk.protocal.Message;
 /**
  * Created by mis on 2016/1/28.
  */
-public class IMTestActivity extends Activity implements ClientHandler.IMEventListener{
+public class IMTestActivity extends BaseActivity implements ClientHandler.IMEventListener{
 
     public  String TAG = getClass().getSimpleName();
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.im_test_layout);
-        initViews();
-        setListenter();
-        tv_status.setText(IMClient.instance().isConnected() ? "is contected" : "is disconnected");
+    public int getLayoutId() {
+        return R.layout.im_test_layout;
     }
 
     private EditText account;
@@ -36,21 +33,33 @@ public class IMTestActivity extends Activity implements ClientHandler.IMEventLis
     private Button logout;
     private Button bt_send_message;
 
-    private void initViews() {
-
+    @Override
+    public void findViews() {
         account = (EditText) findViewById(R.id.account);
         tv_status = (TextView) findViewById(R.id.tv_status);
         bt_login = (Button) findViewById(R.id.bt_login);
         logout = (Button) findViewById(R.id.logout);
         bt_send_message = (Button) findViewById(R.id.bt_send_message);
 
+
+    }
+
+    @Override
+    public void init(Bundle savedInstanceState) {
+
         IMClient.addEventListener(this);
         IMClient.instance().connect();
+        tv_status.setText(IMClient.instance().isConnected() ? "is contected" : "is disconnected");
+
     }
 
 
+
+
+
     int sentcont = 0;
-    public void setListenter(){
+    @Override
+    public void setListeners(){
         bt_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,6 +132,9 @@ public class IMTestActivity extends Activity implements ClientHandler.IMEventLis
         Log.i(TAG, "onSendSucceed");
         if(msg.getCmd() == Message.Data.Cmd.LOGIN_VALUE){
             Log.i(TAG,msg.getLoginSuccess()?"登录成功":"登录失败:"+msg.getContent());
+            if(msg.getLoginSuccess()){
+                ChatActivity.lauchActivity(mActivity,"4567");
+            }
         }
     }
 
@@ -136,4 +148,6 @@ public class IMTestActivity extends Activity implements ClientHandler.IMEventLis
         super.onDestroy();
         IMClient.removeEventListener(this);
     }
+
+
 }

@@ -13,13 +13,13 @@ import com.im.sdk.core.IMClient;
 public abstract class BaseActivity extends Activity implements PageInterface {
 
     protected Context mContext;
-    private Activity mAct;
+    protected Activity mActivity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = ClientApplication.instance();
-        this.mAct = this;
+        this.mActivity = this;
         setContentView(getLayoutId());
         findViews();
         init(savedInstanceState);

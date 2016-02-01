@@ -133,6 +133,7 @@ public class MessageHandler {
         }
     }
 
+    /**所有消息的接收在这处理*/
     public void handReceiveMsg(Message.Data data, ClientHandler.IMEventListener listener) {
         Log.i(TAG, "处理收到消息<<===========<<===========");
         switch (data.getCmd()) {
@@ -144,6 +145,7 @@ public class MessageHandler {
                     Log.i(TAG, "登录结果:"+data.getLoginSuccess());
                     Log.i(TAG, data.getContent() + " time" + data.getCreateTime());
                     HeartBeatManager.instance().startHeartBeat();
+                    //移除发送消息
                     Message.Data.Builder pop = pop(data.getCreateTime());
                     pop.setLoginSuccess(data.getLoginSuccess());
                     pop.setContent(data.getContent());
@@ -166,6 +168,7 @@ public class MessageHandler {
             case Message.Data.Cmd.CHAT_MESSAGE_ECHO_VALUE:
                 Message.Data.Builder pop = pop(data.getCreateTime());
                 Log.i(TAG, "消息回应,发送成功 createTime:" + data.getCreateTime() + "==" + pop.getContent());
+                //移除发送消息
                 IMClient.instance().onSendSucceed(pop);
                 break;
         }

@@ -3,6 +3,7 @@ package com.example.xie;
 import android.app.Application;
 import android.content.Context;
 
+import com.examp.bean.User;
 import com.im.sdk.core.IMClient;
 
 /**
@@ -11,6 +12,10 @@ import com.im.sdk.core.IMClient;
 public class ClientApplication extends Application {
 
     private static Context instance;
+
+    public static User mUser;
+
+
 
     public static Context instance(){
         return instance;
@@ -25,5 +30,6 @@ public class ClientApplication extends Application {
     private void init() {
         IMClient.init(this);
     }
+
 
 }
