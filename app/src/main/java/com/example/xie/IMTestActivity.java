@@ -133,7 +133,7 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
         if(msg.getCmd() == Message.Data.Cmd.LOGIN_VALUE){
             Log.i(TAG,msg.getLoginSuccess()?"登录成功":"登录失败:"+msg.getContent());
             if(msg.getLoginSuccess()){
-                ChatActivity.lauchActivity(mActivity,"4567");
+//                ChatActivity.lauchActivity(mActivity,"4567");
             }
         }
     }

@@ -38,7 +38,7 @@ public class ClientHandler extends ChannelHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
 
-        Log.i(TAG, "channelActive 已连上服务器");
+        Log.i(TAG, "channelActive 已连上服务器"+ctx.channel().isActive());
         if (mListener != null) {
             mListener.onConnected();
         }
@@ -65,6 +65,7 @@ public class ClientHandler extends ChannelHandlerAdapter {
 
     public void channelInactive(ChannelHandlerContext ctx) {
         Log.i("EchoClientHandler", "channelInactive 服务器断开");
+        ctx.close();
         if (mListener != null) {
             mListener.onDisconnected();
         }
