@@ -79,7 +79,7 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
                 Log.i(TAG,"发送");
                 sentcont++;
                 Message.Data.Builder msg = Message.Data.newBuilder();
-                msg.setCmd(Message.Data.Cmd.CHAT_MESSAGE_VALUE);
+                msg.setCmd(Message.Data.Cmd.CHAT_MSG_VALUE);
 
                 //msg.setId("id"+sentcont);
                 msg.setContent("第"+sentcont+"发送");

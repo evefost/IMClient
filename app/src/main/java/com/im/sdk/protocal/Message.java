@@ -103,6 +103,20 @@ public final class Message {
      * <code>optional bool login_success = 8;</code>
      */
     boolean getLoginSuccess();
+
+    /**
+     * <code>optional string receiver = 9;</code>
+     */
+    boolean hasReceiver();
+    /**
+     * <code>optional string receiver = 9;</code>
+     */
+    String getReceiver();
+    /**
+     * <code>optional string receiver = 9;</code>
+     */
+    com.google.protobuf.ByteString
+        getReceiverBytes();
   }
   /**
    * Protobuf type {@code com.im.sdk.protocal.Data}
@@ -124,6 +138,7 @@ public final class Message {
       ip_ = "";
       port_ = 0;
       loginSuccess_ = false;
+      receiver_ = "";
     }
 
     @Override
@@ -197,6 +212,12 @@ public final class Message {
               loginSuccess_ = input.readBool();
               break;
             }
+            case 74: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000100;
+              receiver_ = bs;
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -244,13 +265,17 @@ public final class Message {
        */
       HEARTBEAT(3, 3),
       /**
-       * <code>CHAT_MESSAGE = 4;</code>
+       * <code>CHAT_MSG = 4;</code>
        */
-      CHAT_MESSAGE(4, 4),
+      CHAT_MSG(4, 4),
       /**
-       * <code>CHAT_MESSAGE_ECHO = 5;</code>
+       * <code>CHAT_MSG_ECHO = 5;</code>
        */
-      CHAT_MESSAGE_ECHO(5, 5),
+      CHAT_MSG_ECHO(5, 5),
+      /**
+       * <code>CHAT_OFFLINE_MSGS = 6;</code>
+       */
+      CHAT_OFFLINE_MSGS(6, 6),
       ;
 
       /**
@@ -270,13 +295,17 @@ public final class Message {
        */
       public static final int HEARTBEAT_VALUE = 3;
       /**
-       * <code>CHAT_MESSAGE = 4;</code>
+       * <code>CHAT_MSG = 4;</code>
        */
-      public static final int CHAT_MESSAGE_VALUE = 4;
+      public static final int CHAT_MSG_VALUE = 4;
       /**
-       * <code>CHAT_MESSAGE_ECHO = 5;</code>
+       * <code>CHAT_MSG_ECHO = 5;</code>
        */
-      public static final int CHAT_MESSAGE_ECHO_VALUE = 5;
+      public static final int CHAT_MSG_ECHO_VALUE = 5;
+      /**
+       * <code>CHAT_OFFLINE_MSGS = 6;</code>
+       */
+      public static final int CHAT_OFFLINE_MSGS_VALUE = 6;
 
 
       public final int getNumber() {
@@ -289,8 +318,9 @@ public final class Message {
           case 1: return LOGOUT;
           case 2: return OTHER_LOGGIN;
           case 3: return HEARTBEAT;
-          case 4: return CHAT_MESSAGE;
-          case 5: return CHAT_MESSAGE_ECHO;
+          case 4: return CHAT_MSG;
+          case 5: return CHAT_MSG_ECHO;
+          case 6: return CHAT_OFFLINE_MSGS;
           default: return null;
         }
       }
@@ -571,6 +601,48 @@ public final class Message {
       return loginSuccess_;
     }
 
+    public static final int RECEIVER_FIELD_NUMBER = 9;
+    private volatile Object receiver_;
+    /**
+     * <code>optional string receiver = 9;</code>
+     */
+    public boolean hasReceiver() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    /**
+     * <code>optional string receiver = 9;</code>
+     */
+    public String getReceiver() {
+      Object ref = receiver_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          receiver_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string receiver = 9;</code>
+     */
+    public com.google.protobuf.ByteString
+        getReceiverBytes() {
+      Object ref = receiver_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        receiver_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -615,6 +687,9 @@ public final class Message {
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         output.writeBool(8, loginSuccess_);
       }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeBytes(9, getReceiverBytes());
+      }
       unknownFields.writeTo(output);
     }
 
@@ -655,6 +730,10 @@ public final class Message {
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(8, loginSuccess_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(9, getReceiverBytes());
       }
       size += unknownFields.getSerializedSize();
       memoizedSerializedSize = size;
@@ -784,6 +863,8 @@ public final class Message {
         bitField0_ = (bitField0_ & ~0x00000040);
         loginSuccess_ = false;
         bitField0_ = (bitField0_ & ~0x00000080);
+        receiver_ = "";
+        bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
 
@@ -840,6 +921,10 @@ public final class Message {
           to_bitField0_ |= 0x00000080;
         }
         result.loginSuccess_ = loginSuccess_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        result.receiver_ = receiver_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -887,6 +972,11 @@ public final class Message {
         }
         if (other.hasLoginSuccess()) {
           setLoginSuccess(other.getLoginSuccess());
+        }
+        if (other.hasReceiver()) {
+          bitField0_ |= 0x00000100;
+          receiver_ = other.receiver_;
+          onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -1354,6 +1444,82 @@ public final class Message {
         return this;
       }
 
+      private Object receiver_ = "";
+      /**
+       * <code>optional string receiver = 9;</code>
+       */
+      public boolean hasReceiver() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>optional string receiver = 9;</code>
+       */
+      public String getReceiver() {
+        Object ref = receiver_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            receiver_ = s;
+          }
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <code>optional string receiver = 9;</code>
+       */
+      public com.google.protobuf.ByteString
+          getReceiverBytes() {
+        Object ref = receiver_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          receiver_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string receiver = 9;</code>
+       */
+      public Builder setReceiver(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000100;
+        receiver_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string receiver = 9;</code>
+       */
+      public Builder clearReceiver() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        receiver_ = getDefaultInstance().getReceiver();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string receiver = 9;</code>
+       */
+      public Builder setReceiverBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000100;
+        receiver_ = value;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:com.im.sdk.protocal.Data)
     }
 
@@ -1411,14 +1577,15 @@ public final class Message {
       descriptor;
   static {
     String[] descriptorData = {
-      "\n\rmessage.proto\022\023com.im.sdk.protocal\"\357\001\n" +
+      "\n\rmessage.proto\022\023com.im.sdk.protocal\"\220\002\n" +
       "\004Data\022\013\n\003cmd\030\001 \002(\005\022\023\n\013create_time\030\002 \002(\003\022" +
       "\n\n\002id\030\003 \001(\t\022\017\n\007account\030\004 \001(\t\022\017\n\007content\030" +
       "\005 \001(\t\022\n\n\002ip\030\006 \001(\t\022\014\n\004port\030\007 \001(\005\022\025\n\rlogin" +
-      "_success\030\010 \001(\010\"f\n\003Cmd\022\t\n\005LOGIN\020\000\022\n\n\006LOGO" +
-      "UT\020\001\022\020\n\014OTHER_LOGGIN\020\002\022\r\n\tHEARTBEAT\020\003\022\020\n" +
-      "\014CHAT_MESSAGE\020\004\022\025\n\021CHAT_MESSAGE_ECHO\020\005B\036" +
-      "\n\023com.im.sdk.protocalB\007Message"
+      "_success\030\010 \001(\010\022\020\n\010receiver\030\t \001(\t\"u\n\003Cmd\022" +
+      "\t\n\005LOGIN\020\000\022\n\n\006LOGOUT\020\001\022\020\n\014OTHER_LOGGIN\020\002" +
+      "\022\r\n\tHEARTBEAT\020\003\022\014\n\010CHAT_MSG\020\004\022\021\n\rCHAT_MS" +
+      "G_ECHO\020\005\022\025\n\021CHAT_OFFLINE_MSGS\020\006B\036\n\023com.i" +
+      "m.sdk.protocalB\007Message"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -1437,7 +1604,7 @@ public final class Message {
     internal_static_com_im_sdk_protocal_Data_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_com_im_sdk_protocal_Data_descriptor,
-        new String[] { "Cmd", "CreateTime", "Id", "Account", "Content", "Ip", "Port", "LoginSuccess", });
+        new String[] { "Cmd", "CreateTime", "Id", "Account", "Content", "Ip", "Port", "LoginSuccess", "Receiver", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
