@@ -113,7 +113,6 @@ public class MessageHandler {
                             //心跳消息不用通知
                             IMClient.instance().onSendFailure(msg);
                         }
-
                     }
                 } else {
                     Log.i(TAG, "服务器已经断开,重连");
@@ -130,31 +129,30 @@ public class MessageHandler {
     }
 
     private void proccessSendMessage(Message.Data.Builder data) {
-        Log.i(TAG, "处理发送消息===========>>==========>>");
+        Log.i(TAG, "处理发送消息=====>>=====>>cmd["+data.getCmd());
         switch (data.getCmd()) {
             case Cmd.LOGIN_VALUE:
-                Log.i(TAG, "登录[" + data.getAccount());
+                Log.i(TAG, "登录 account[" + data.getAccount());
                 break;
             case Cmd.HEARTBEAT_VALUE:
-                Log.i("HeartBeatManager", "心跳消息 time:" + data.getCreateTime());
+                Log.i(TAG,"心跳消息 time[" + data.getCreateTime());
                 break;
             case Cmd.CHAT_MSG_VALUE:
-                Log.i(TAG, "聊天消息 [" + data.getContent());
+                Log.i(TAG, "聊天消息    [" + data.getContent());
                 break;
         }
     }
 
     /**所有消息的接收在这处理*/
     public void handReceiveMsg(Message.Data data, ClientHandler.IMEventListener listener) {
-        Log.i(TAG, "处理收到消息<<===========<<===========");
+        Log.i(TAG, "处理收到消息<<======<<======cmd["+data.getCmd());
         switch (data.getCmd()) {
             case Cmd.LOGIN_VALUE:
                 if (TextUtils.isEmpty(data.getAccount())) {
-                    Log.i(TAG, "服务端登录请求 msg[" + data.getContent() );
+                    Log.i(TAG, "服务端登录请求    msg[" + data.getContent() );
                     listener.onReceiveMessage(data);
                 } else {
-                    Log.i(TAG, "登录结果:"+data.getLoginSuccess());
-                    Log.i(TAG, data.getContent() + " time" + data.getCreateTime());
+                    Log.i(TAG, "登录结果 LoginSuccess["+data.getLoginSuccess());
                     HeartBeatManager.instance().startHeartBeat();
                     //移除发送消息
                     Message.Data.Builder pop = pop(data.getCreateTime());
@@ -164,11 +162,11 @@ public class MessageHandler {
                 }
                 break;
             case Cmd.OTHER_LOGGIN_VALUE:
-                Log.i(TAG, "帐号别处登录");
+                Log.i(TAG, "帐号别处登录     account["+data.getAccount());
                 listener.onReceiveMessage(data);
                 break;
             case Cmd.HEARTBEAT_VALUE:
-                Log.i("HeartBeatManager", "服务端回应的心跳消息:" + data.getCreateTime());
+                Log.i(TAG, "心跳回应                [" + data.getCreateTime());
                 //移除心跳消息
                 pop(data.getCreateTime());
                 break;
@@ -177,9 +175,10 @@ public class MessageHandler {
                 listener.onReceiveMessage(data);
                 break;
             case Message.Data.Cmd.CHAT_MSG_ECHO_VALUE:
-                Log.i(TAG, "<<<<<<<<<<<<<<<<<<<<<消息回应,发送成功");
+                Log.i(TAG, "消息回应,发送成功   time["+data.getCreateTime());
                 Message.Data.Builder pop = pop(data.getCreateTime());
                 Log.i(TAG, "createTime:" + data.getCreateTime() + "==pop:" + pop.getContent());
+                pop.setCmd(Cmd.CHAT_MSG_ECHO_VALUE);
                 //移除发送消息
                 IMClient.instance().onSendSucceed(pop);
                 break;

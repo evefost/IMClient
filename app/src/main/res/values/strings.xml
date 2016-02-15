@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">ichat</string>
+	<string name="app_name">IM</string>
 	<string name="minuteago">分钟前</string>
     <string name="hourago">小时前</string>
     <string name="dayago">天前</string>
