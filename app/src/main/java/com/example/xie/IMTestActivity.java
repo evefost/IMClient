@@ -14,6 +14,8 @@ import com.im.sdk.core.ClientHandler;
 import com.im.sdk.core.IMClient;
 import com.im.sdk.protocal.Message;
 
+import common.BaseActivity;
+
 
 /**
  * Created by mis on 2016/1/28.
