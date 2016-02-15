@@ -14,13 +14,11 @@ import com.im.sdk.core.ClientHandler;
 import com.im.sdk.core.IMClient;
 import com.im.sdk.protocal.Message;
 
-import common.BaseActivity;
-
 
 /**
  * Created by mis on 2016/1/28.
  */
-public class IMTestActivity extends BaseActivity implements ClientHandler.IMEventListener,View.OnClickListener{
+public class IMTestActivity extends BaseActivity implements ClientHandler.IMEventListener{
 
     public  String TAG = getClass().getSimpleName();
 
@@ -34,7 +32,6 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
     private Button bt_login;
     private Button logout;
     private Button bt_send_message;
-    private Button bt_leak_test;
 
     @Override
     public void findViews() {
@@ -44,14 +41,14 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
         logout = (Button) findViewById(R.id.logout);
         bt_send_message = (Button) findViewById(R.id.bt_send_message);
 
-        bt_leak_test = (Button) findViewById(R.id.bt_leak_test);
+
     }
 
     @Override
     public void init(Bundle savedInstanceState) {
 
         IMClient.addEventListener(this);
-//        IMClient.instance().connect();
+        IMClient.instance().connect();
         tv_status.setText(IMClient.instance().isConnected() ? "is contected" : "is disconnected");
 
     }
@@ -63,10 +60,32 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
     int sentcont = 0;
     @Override
     public void setListeners(){
-        bt_login.setOnClickListener(this);
-        logout.setOnClickListener(this);
-        bt_send_message.setOnClickListener(this);
-        bt_leak_test.setOnClickListener(this);
+        bt_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IMClient.instance().connect();
+            }
+        });
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IMClient.instance().disconnect();
+            }
+        });
+
+        bt_send_message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG,"发送");
+                sentcont++;
+                Message.Data.Builder msg = Message.Data.newBuilder();
+                msg.setCmd(Message.Data.Cmd.CHAT_MSG_VALUE);
+
+                //msg.setId("id"+sentcont);
+                msg.setContent("第"+sentcont+"发送");
+                IMClient.instance().sendMessage(msg);
+            }
+        });
     }
 
     @Override
@@ -131,28 +150,4 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
     }
 
 
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.bt_login:
-                IMClient.instance().connect();
-                break;
-            case R.id.logout:
-                IMClient.instance().disconnect();
-                break;
-            case R.id.bt_send_message:
-                Log.i(TAG,"发送");
-                sentcont++;
-                Message.Data.Builder msg = Message.Data.newBuilder();
-                msg.setCmd(Message.Data.Cmd.CHAT_MESSAGE_VALUE);
-                //msg.setId("id"+sentcont);
-                msg.setContent("第"+sentcont+"发送");
-                IMClient.instance().sendMessage(msg);
-                break;
-            case R.id.bt_leak_test:
-
-                break;
-        }
-    }
 }
