@@ -13,9 +13,12 @@ import com.example.xie.imclient.R;
 import com.im.sdk.core.ClientHandler;
 import com.im.sdk.protocal.Message;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import common.BaseActivity;
 
 /**
  * Created by xie on 2016/2/1.

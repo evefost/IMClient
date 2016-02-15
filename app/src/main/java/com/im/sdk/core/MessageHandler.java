@@ -61,7 +61,8 @@ public class MessageHandler {
             long time = currentTime - timeStrart;
             if (time >= timeOut) {
                 IMClient.instance().onSendFailure(entry.getValue());
-                pop(entry.getKey());
+                Log.i(TAG, "发送超时:" + entry.getValue().getContent() + "==" + entry.getValue().getCreateTime());
+                IMClient.instance().onSendFailure(pop(entry.getKey()));
             }
         }
     }

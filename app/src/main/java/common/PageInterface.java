@@ -1,4 +1,4 @@
-package com.example.xie;
+package common;
 
 import android.os.Bundle;
 

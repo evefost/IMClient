@@ -53,7 +53,7 @@ public final class IMClient implements ClientHandler.IMEventListener {
     /**
      * 服务端地址
      */
-    static final String HOST = "192.168.1.3";
+    static final String HOST = "192.168.60.91";
     /**
      * 服务端端口
      */
