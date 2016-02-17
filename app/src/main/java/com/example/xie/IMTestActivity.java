@@ -1,6 +1,5 @@
 package com.example.xie;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -9,14 +8,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.common.ui.base.BaseActivity;
 import com.example.xie.imclient.R;
 import com.im.sdk.core.ClientHandler;
 import com.im.sdk.core.IMClient;
 import com.im.sdk.protocal.Message;
 import com.im.sdk.protocal.Message.Data.Cmd;
-import common.BaseActivity;
 
 
 /**
@@ -39,7 +37,7 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
     private Button logout;
     private Button bt_send_message;
     private Button login_status;
-
+    private Button  btn_chat;
     private ProgressBar prgs_send;
     @Override
     public void findViews() {
@@ -52,7 +50,7 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
         btn_connect = (Button) findViewById(R.id.btn_connect);
         btn_disconnect = (Button) findViewById(R.id.btn_disconnect);
         login_status = (Button) findViewById(R.id.login_status);
-
+        btn_chat = (Button) findViewById(R.id.btn_chat);
         prgs_send = (ProgressBar) findViewById(R.id.prgs_send);
 
     }
@@ -76,6 +74,7 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
         btn_disconnect.setOnClickListener(this);
         bt_login.setOnClickListener(this);
         logout.setOnClickListener(this);
+        btn_chat.setOnClickListener(this);
         bt_send_message.setOnClickListener(this);
     }
 
@@ -176,6 +175,10 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
                 //msg.setId("id"+sentcont);
                 msg.setContent("第" + sentcont + "发送");
                 IMClient.instance().sendMessage(msg);
+                break;
+            case R.id.btn_chat:
+               ChatActivity.lauchActivity(this, ChatActivity.class);
+//                startActivity(new Intent(this, DemoActivity.class));
                 break;
         }
     }

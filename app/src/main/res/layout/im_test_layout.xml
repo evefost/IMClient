@@ -61,15 +61,16 @@
             android:digits="._@0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLIMNOPQRSTUVWXYZ"
             android:maxLength="16"
             android:maxLines="1"
-            android:textSize="16sp"
+            android:singleLine="true"
             android:textColor="@color/black"
-            android:singleLine="true" />
+            android:textSize="16sp" />
+
         <Button
             android:id="@+id/login_status"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-           android:singleLine="true"
             android:layout_weight="3"
+            android:singleLine="true"
             android:text="未登录" />
     </LinearLayout>
 
@@ -99,22 +100,30 @@
             android:text="logOut" />
 
     </LinearLayout>
-<RelativeLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/bt_send_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="send" />
+
+        <ProgressBar
+            android:id="@+id/prgs_send"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
     <Button
-        android:id="@+id/bt_send_message"
+        android:id="@+id/btn_chat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="send" />
-
-    <ProgressBar
-        style="?android:attr/progressBarStyleSmall"
-        android:layout_width="15dp"
-        android:layout_centerInParent="true"
-        android:layout_height="15dp"
-        android:id="@+id/prgs_send" />
-</RelativeLayout>
+        android:text="chat" />
 
 </LinearLayout>

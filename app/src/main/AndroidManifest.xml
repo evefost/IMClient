@@ -12,6 +12,15 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat">
+        <!--base on this screen -->
+        <meta-data
+            android:name="design_width"
+            android:value="1080" />
+        <meta-data
+            android:name="design_height"
+            android:value="1920" />
+        <!---->
+
         <activity
             android:name="com.example.xie.IMTestActivity"
             android:label="@string/app_name">

@@ -1,4 +1,4 @@
-package common;
+package com.common.ui.base;
 
 import android.os.Bundle;
 
@@ -8,8 +8,9 @@ import android.os.Bundle;
 public interface PageInterface {
 
 
-    public int getLayoutId();
 
+
+    public int getLayoutId();
 
     public void findViews();
 

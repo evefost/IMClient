@@ -8,6 +8,7 @@ import com.examp.bean.User;
 import com.im.sdk.core.IMClient;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
+import com.zhy.autolayout.config.AutoLayoutConifg;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.GINGERBREAD;
@@ -37,6 +38,8 @@ public class ClientApplication extends Application {
     }
 
     private void init() {
+
+        AutoLayoutConifg.getInstance().useDeviceSize().init(this);
         IMClient.init(this);
     }
     private void enabledStrictMode() {

@@ -1,4 +1,4 @@
-package common;
+package com.common.ui.base;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,8 +15,9 @@ import java.io.Serializable;
  */
 public abstract class BaseActivity extends AutoLayoutActivity implements PageInterface {
 
-    protected Context mContext;
-    protected Activity mActivity;
+    protected  Context mContext = null;
+    protected Activity mActivity = null;
+
 
     public static void lauchActivity(Activity startActivity,Class cls){
         lauchActivity(startActivity,cls,null);
@@ -34,7 +35,7 @@ public abstract class BaseActivity extends AutoLayoutActivity implements PageInt
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext = this.getApplicationContext();
+        mContext = getApplicationContext();
         this.mActivity = this;
         setContentView(getLayoutId());
         findViews();

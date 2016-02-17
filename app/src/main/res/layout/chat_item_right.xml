@@ -3,24 +3,34 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_alignParentRight="true"
-        android:layout_width="160dp"
+    <RelativeLayout
+        android:padding="10px"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:background="#ffffff"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:background="#f0f0f0" />
 
         <TextView
-            android:id="@+id/tv_message"
-            android:gravity="right"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
 
-    </LinearLayout>
+            android:layout_toLeftOf="@+id/iv_header"
+            android:id="@+id/tv_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="160px"
+            android:layout_marginRight="8px"
+            android:lineSpacingExtra="2px"
+            android:background="@drawable/im_mine_message_bkgnd"
+            android:text="100000000000000000000000000000000000000000000011"
+            android:textColor="@color/black"
+            android:textSize="36px" />
+
+        <ImageView
+            android:id="@+id/iv_header"
+            android:layout_alignParentRight="true"
+            android:layout_width="160px"
+            android:layout_height="160px"
+            android:src="@drawable/tuijian_touxiang6" />
+    </RelativeLayout>
 </RelativeLayout>
