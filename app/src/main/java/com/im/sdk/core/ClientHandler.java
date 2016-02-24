@@ -83,12 +83,15 @@ public class ClientHandler extends ChannelHandlerAdapter {
         public static final int EVENT_SEND_FAILURE = 3;
         public static final int EVENT_SEND_SUCCESS = 4;
         public static final int EVENT_CONNECT_FAILURE = 5;
+        public static final int EVENT_CONNECT_ING= 6;
 
         public void onSendFailure(Message.Data.Builder msg);
 
         public void onSendSucceed(Message.Data.Builder msg);
 
         public void onConnectFailure(String msg);
+
+        public void onConnecting();
 
     }
 
