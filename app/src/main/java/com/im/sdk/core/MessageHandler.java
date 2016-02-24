@@ -11,6 +11,7 @@ import com.im.sdk.protocal.Message;
 import  com.im.sdk.protocal.Message.Data.Cmd;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 
@@ -30,7 +31,7 @@ public class MessageHandler {
     public static long timeOut = 30 * 1000;
     private static MessageHandler instance = new MessageHandler();
     private Context context = ClientApplication.instance();
-
+    private ExecutorService mExecutor;
     private Handler timerHandler = new Handler();
     private boolean looping = false;
     private boolean isStopLoop = false;
@@ -41,6 +42,9 @@ public class MessageHandler {
         return instance;
     }
 
+    public void setExcutor(ExecutorService executor){
+        this.mExecutor = executor;
+    }
 
     private void loopMessage() {
         Log.i(TAG,"loopMessage mQueue size["+mQueue.size());
@@ -89,12 +93,16 @@ public class MessageHandler {
         return null;
     }
 
-    public void handSendMsg(ExecutorService executor, final Channel channel, final Message.Data.Builder msg) {
+
+    private  Channel mChannel;
+    public void handSendMsg(final Channel channel, final Message.Data.Builder msg) {
+
+        mChannel = channel;
         //必须设置发送时间
         msg.setCreateTime(System.currentTimeMillis());
         proccessSendMessage(msg);
         push(msg);
-        executor.execute(new Runnable() {
+        mExecutor.execute(new Runnable() {
             @Override
             public void run() {
 
@@ -126,6 +134,15 @@ public class MessageHandler {
                 }
             }
         });
+    }
+
+    public void onConnected(){
+        //连接成功
+        ConcurrentHashMap<Long, Message.Data.Builder> mQueue = this.mQueue;
+        Set<Map.Entry<Long, Message.Data.Builder>> entries =  mQueue.entrySet();
+        for(Map.Entry<Long, Message.Data.Builder> entry:entries){
+            handSendMsg(mChannel,entry.getValue());
+        }
     }
 
     private void proccessSendMessage(Message.Data.Builder data) {

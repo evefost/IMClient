@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/IMClient.iml" filepath="$PROJECT_DIR$/IMClient.iml" />
       <module fileurl="file://$PROJECT_DIR$/IMClient2.iml" filepath="$PROJECT_DIR$/IMClient2.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/autolayout/autolayout.iml" filepath="$PROJECT_DIR$/autolayout/autolayout.iml" />
+      <module fileurl="file://$PROJECT_DIR$/generatedao/generatedao.iml" filepath="$PROJECT_DIR$/generatedao/generatedao.iml" />
     </modules>
   </component>
 </project>

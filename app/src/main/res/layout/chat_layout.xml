@@ -22,18 +22,21 @@
             android:layout_centerVertical="true"
             android:id="@+id/et_input"
             android:textSize="36px"
-            android:layout_marginRight="10px"
+            android:layout_marginRight="15px"
             android:hint="..."
 
             android:background="@drawable/bg_round_glay_border"
             android:layout_width="match_parent"
             android:layout_toLeftOf="@+id/tv_send"
-            android:layout_height="100px" />
+            android:layout_height="102px" />
         <TextView
+
             android:layout_centerVertical="true"
             android:id="@+id/tv_send"
             android:text="发送"
             android:textSize="48px"
+            android:paddingLeft="15px"
+            android:paddingRight="15px"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_btn_round_red"

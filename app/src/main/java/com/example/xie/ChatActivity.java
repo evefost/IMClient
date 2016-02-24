@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.common.ui.base.BaseActivity;
 import com.example.xie.imclient.R;
 import com.im.sdk.core.ClientHandler;
+import com.im.sdk.dao.DaoMaster;
 import com.im.sdk.protocal.Message;
 
 
@@ -26,6 +28,8 @@ import java.util.Random;
  */
 public class ChatActivity extends BaseActivity implements ClientHandler.IMEventListener {
 
+
+    private  String TAG = getClass().getSimpleName();
 
     public static void lauchActivity(Activity activity, String account) {
         Intent intent = new Intent(activity.getApplicationContext(), ChatActivity.class);
@@ -54,11 +58,13 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
 
     @Override
     public void init(Bundle savedInstanceState) {
+        setTitle("chat...");
         mAdapter = new RcAdater();
         rcView.setLayoutManager(new LinearLayoutManager(mActivity));
         rcView.setAdapter(mAdapter);
         generDatas();
         mAdapter.notifyDataSetChanged();
+        DaoMaster.DevOpenHelper openHelper = new DaoMaster.DevOpenHelper(mContext, null, null);
     }
 
     @Override
@@ -110,7 +116,9 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
 
     @Override
     public void onReceiveMessage(Message.Data msg) {
+        if(msg.getCmd() == Message.Data.Cmd.CHAT_MSG_VALUE){
 
+        }
     }
 
     @Override
@@ -122,7 +130,10 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
     public void onDisconnected() {
 
     }
-
+    @Override
+    public void onConnecting() {
+        Log.i(TAG, "onConnecting");
+    }
 
     private class RcAdater extends RecyclerView.Adapter {
 

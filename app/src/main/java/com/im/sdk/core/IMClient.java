@@ -75,11 +75,11 @@ public final class IMClient implements ClientHandler.IMEventListener {
     private ExecutorService executor;
 
     private String account = "123456";
+    private boolean isConnecting;
 
     private IMClient() {
         init();
     }
-
     public static void init(Context ctx) {
         if (mInstance == null) {
             mInstance = new IMClient();
@@ -93,10 +93,11 @@ public final class IMClient implements ClientHandler.IMEventListener {
     private void init() {
 
         Log.i(TAG, "初始化连接");
-        executor = Executors.newFixedThreadPool(3);
+        executor = Executors.newCachedThreadPool();
         mUIhander = new Handler();
         handler = new ClientHandler(this);
         mMessageHandler = MessageHandler.instance();
+        mMessageHandler.setExcutor(executor);
         loopGroup = new NioEventLoopGroup();
         bootstrap = new Bootstrap();
         bootstrap.group(loopGroup)
@@ -113,7 +114,7 @@ public final class IMClient implements ClientHandler.IMEventListener {
                 });
     }
 
-    public boolean reconnect(){
+    public boolean reconnect() {
         //TODO SOMETHING
         connect();
         return false;
@@ -127,11 +128,14 @@ public final class IMClient implements ClientHandler.IMEventListener {
 
                 if (channel != null && channel.isActive()) {
                     Log.i(TAG, "已连接服务器");
+                    isConnecting = false;
                     return;
                 }
                 Log.i(TAG, "启动连接服务器");
                 ChannelFuture f = null;
                 try {
+                    isConnecting = true;
+                    onConnecting();
                     f = bootstrap.connect(HOST, PORT).sync();
                     f.addListener(new ChannelFutureListener() {
                         @Override
@@ -146,7 +150,9 @@ public final class IMClient implements ClientHandler.IMEventListener {
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.i(TAG, "connect EX" + e.toString());
+                    isConnecting = false;
                     onConnectFailure(e.toString());
+
                 } finally {
                     // Shut down the event loop to terminate all threads.
                     Log.i(TAG, " Shut down the event loop to terminate all threads.");
@@ -159,7 +165,7 @@ public final class IMClient implements ClientHandler.IMEventListener {
     }
 
     public void sendMessage(final Message.Data.Builder msg) {
-        mMessageHandler.handSendMsg(executor, channel, msg);
+        mMessageHandler.handSendMsg(channel, msg);
     }
 
     public void disconnect() {
@@ -182,16 +188,17 @@ public final class IMClient implements ClientHandler.IMEventListener {
     }
 
     @Override
-    public void onReceiveMessage(final Message.Data  message) {
+    public void onReceiveMessage(final Message.Data message) {
         Log.i(TAG, " onReceiveMessage ");
         notifyListener(message, EVENT_RECEIVE_MESSAGE);
     }
 
     @Override
     public void onConnected() {
+        isConnecting = false;
         Log.i(TAG, " onConnected ");
         notifyListener(null, EVENT_CONNECTED);
-
+        mMessageHandler.onConnected();
     }
 
     @Override
@@ -201,12 +208,12 @@ public final class IMClient implements ClientHandler.IMEventListener {
     }
 
     @Override
-    public void onSendFailure( Message.Data.Builder  msg) {
+    public void onSendFailure(Message.Data.Builder msg) {
         notifyListener(msg, EVENT_SEND_FAILURE);
     }
 
     @Override
-    public void onSendSucceed( Message.Data.Builder  msg) {
+    public void onSendSucceed(Message.Data.Builder msg) {
         notifyListener(msg, EVENT_SEND_SUCCESS);
     }
 
@@ -215,9 +222,15 @@ public final class IMClient implements ClientHandler.IMEventListener {
         notifyListener(msg, EVENT_CONNECT_FAILURE);
     }
 
+    @Override
+    public void onConnecting() {
+        notifyListener(null, EVENT_CONNECT_ING);
+    }
+
 
     /**
      * 通知所有事件监听器
+     *
      * @param message
      * @param EVENT
      */
@@ -234,16 +247,19 @@ public final class IMClient implements ClientHandler.IMEventListener {
                         listener.onDisconnected();
                     } else if (EVENT == EVENT_RECEIVE_MESSAGE) {
                         Log.i(TAG, "收到消息，处理各类消息");
-                        mMessageHandler.handReceiveMsg((Message.Data) message,listener);
+                        mMessageHandler.handReceiveMsg((Message.Data) message, listener);
                     } else if (EVENT == EVENT_SEND_FAILURE) {
                         Log.i(TAG, "发送失败");
-                        listener.onSendFailure(( Message.Data.Builder) message);
+                        listener.onSendFailure((Message.Data.Builder) message);
                     } else if (EVENT == EVENT_SEND_SUCCESS) {
                         Log.i(TAG, "发送成功");
-                        listener.onSendSucceed(( Message.Data.Builder) message);
+                        listener.onSendSucceed((Message.Data.Builder) message);
                     } else if (EVENT == EVENT_CONNECT_FAILURE) {
                         Log.i(TAG, "连接失败" + message.toString());
                         listener.onConnectFailure((String) message);
+                    }else if (EVENT == EVENT_CONNECT_ING) {
+                        Log.i(TAG, "连接中...");
+                        listener.onConnecting();
                     }
                 }
             }

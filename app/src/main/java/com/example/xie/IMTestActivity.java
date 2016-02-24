@@ -20,7 +20,7 @@ import com.im.sdk.protocal.Message.Data.Cmd;
 /**
  * Created by mis on 2016/1/28.
  */
-public class IMTestActivity extends BaseActivity implements ClientHandler.IMEventListener,View.OnClickListener {
+public class IMTestActivity extends BaseActivity implements ClientHandler.IMEventListener, View.OnClickListener {
 
     public String TAG = getClass().getSimpleName();
 
@@ -37,8 +37,9 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
     private Button logout;
     private Button bt_send_message;
     private Button login_status;
-    private Button  btn_chat;
+    private Button btn_chat;
     private ProgressBar prgs_send;
+
     @Override
     public void findViews() {
         account = (EditText) findViewById(R.id.account);
@@ -58,6 +59,7 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
     @Override
     public void init(Bundle savedInstanceState) {
 
+        hideTopBar(true);
         prgs_send.setVisibility(View.INVISIBLE);
         IMClient.addEventListener(this);
 
@@ -95,6 +97,12 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
     }
 
     @Override
+    public void onConnecting() {
+        Log.i(TAG, "onConnecting");
+        tv_status.setText("连接中....");
+    }
+
+    @Override
     public void onConnected() {
         Log.i(TAG, "onConnected");
         tv_status.setText("on conected");
@@ -107,24 +115,27 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
         Log.i(TAG, "onDisconnected");
     }
 
+
     @Override
     public void onSendFailure(Message.Data.Builder msg) {
         Log.i(TAG, "onSendFailure");
         if (msg.getCmd() == Message.Data.Cmd.LOGIN_VALUE) {
-
             Log.i(TAG, "登录失败");
+        } else if (msg.getCmd() == Cmd.CHAT_MSG_VALUE){
+            prgs_send.setVisibility(View.INVISIBLE);
+            bt_send_message.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public void onSendSucceed(Message.Data.Builder msg) {
-        Log.i(TAG, "onSendSucceed cmd ["+msg.getCmd());
+        Log.i(TAG, "onSendSucceed cmd [" + msg.getCmd());
         if (msg.getCmd() == Cmd.LOGIN_VALUE) {
             Log.i(TAG, msg.getLoginSuccess() ? "登录成功" : "登录失败:" + msg.getContent());
             if (msg.getLoginSuccess()) {
                 login_status.setText("已登录");
             }
-        }else if(msg.getCmd() == Cmd.CHAT_MSG_ECHO_VALUE){
+        } else if (msg.getCmd() == Cmd.CHAT_MSG_ECHO_VALUE) {
             Log.i(TAG, "发送成功");
             prgs_send.setVisibility(View.INVISIBLE);
             bt_send_message.setVisibility(View.VISIBLE);
@@ -133,8 +144,12 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
 
     @Override
     public void onConnectFailure(String msg) {
-
+        Log.i(TAG, "onConnectFailure" + msg);
+        tv_status.setText("连接失败....");
+        prgs_send.setVisibility(View.INVISIBLE);
+        bt_send_message.setVisibility(View.VISIBLE);
     }
+
 
     @Override
     protected void onDestroy() {
@@ -145,7 +160,7 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_connect:
                 IMClient.instance().connect();
                 break;
@@ -175,9 +190,13 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
                 //msg.setId("id"+sentcont);
                 msg.setContent("第" + sentcont + "发送");
                 IMClient.instance().sendMessage(msg);
+                Message.Data sdata = msg.build();
+                ;
+
+                Log.i(TAG, "send data content:" + sdata.getContent());
                 break;
             case R.id.btn_chat:
-               ChatActivity.lauchActivity(this, ChatActivity.class);
+                ChatActivity.lauchActivity(this, ChatActivity.class);
 //                startActivity(new Intent(this, DemoActivity.class));
                 break;
         }
