@@ -8,6 +8,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.example.xie.imclient.R;
 
 /**
  * Created by mis on 2016/2/17.
@@ -16,7 +21,7 @@ public abstract class BaseFragment extends Fragment implements PageInterface {
 
     protected Context mContext = null;
     protected Activity mActivity = null;
-    private View mView;
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -25,14 +30,36 @@ public abstract class BaseFragment extends Fragment implements PageInterface {
         mActivity = getActivity();
     }
 
+    private LinearLayout mContentView;
+    private ViewGroup mHeaderView;
+    private View rl_left;
+    private View rl_right;
+    private TextView tv_title;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mView = inflater.inflate(getLayoutId(), container, false);
+
+        mContentView = new LinearLayout(mActivity);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+        mContentView.setLayoutParams(params);
+        mContentView.setOrientation(LinearLayout.VERTICAL);
+
+        mHeaderView = new FrameLayout(mActivity);
+        ViewGroup.LayoutParams hParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        mHeaderView.addView(mActivity.getLayoutInflater().inflate(R.layout.header, null));
+        mContentView.addView(mHeaderView);
+
+        View mView = inflater.inflate(getLayoutId(), container, false);
+        mContentView.addView(mView);
+
+        initHeaderView();
         findViews();
-        return mView;
+        return mContentView;
     }
 
-
+    private void initHeaderView(){
+        rl_left = mHeaderView.findViewById(R.id.rl_left);
+        tv_title = (TextView) mHeaderView.findViewById(R.id.tv_title);
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -42,7 +69,7 @@ public abstract class BaseFragment extends Fragment implements PageInterface {
     }
 
     public View findViewById(int id) {
-        return mView.findViewById(id);
+        return mContentView.findViewById(id);
     }
 
     @Override

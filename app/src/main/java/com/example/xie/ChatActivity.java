@@ -65,7 +65,7 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
         mAdapter = new RcAdater();
         rcView.setLayoutManager(new LinearLayoutManager(mActivity));
         rcView.setAdapter(mAdapter);
-        generDatas();
+        loadLocalMessages();
         mAdapter.notifyDataSetChanged();
 
     }
@@ -91,7 +91,7 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
         });
     }
 
-    private void generDatas() {
+    private void loadLocalMessages() {
         Message.Data.Builder data = null;
         for (int i = 0; i < 50; i++) {
             data = Message.Data.newBuilder();
