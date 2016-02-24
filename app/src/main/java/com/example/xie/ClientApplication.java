@@ -41,6 +41,7 @@ public class ClientApplication extends Application {
 
         AutoLayoutConifg.getInstance().useDeviceSize().init(this);
         IMClient.init(this);
+        IMClient.instance().connect();
     }
     private void enabledStrictMode() {
         if (SDK_INT >= GINGERBREAD) {

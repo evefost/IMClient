@@ -84,13 +84,13 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
     public void onReceiveMessage(Message.Data msg) {
 
         Log.i(TAG, "data cmd[" + msg.getCmd() + "]id[" + msg.getId() + "]username[" + msg.getContent());
-        if (msg.getCmd() == Message.Data.Cmd.LOGIN_VALUE && TextUtils.isEmpty(msg.getAccount())) {
+        if (msg.getCmd() == Message.Data.Cmd.LOGIN_VALUE && TextUtils.isEmpty(msg.getSender())) {
             //未登录，登录
             Log.i(TAG, "未登录，登录");
             login_status.setText("未登录");
             Message.Data.Builder accountInfo = Message.Data.newBuilder();
             accountInfo.setCmd(Message.Data.Cmd.LOGIN_VALUE);
-            accountInfo.setAccount("xieyang123");
+            accountInfo.setSender("xieyang123");
             IMClient.instance().sendMessage(accountInfo);
         }
 
@@ -171,7 +171,7 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
             case R.id.bt_login:
                 Message.Data.Builder accountInfo = Message.Data.newBuilder();
                 accountInfo.setCmd(Message.Data.Cmd.LOGIN_VALUE);
-                accountInfo.setAccount("xieyang123");
+                accountInfo.setSender("xieyang123");
                 IMClient.instance().sendMessage(accountInfo);
                 break;
 

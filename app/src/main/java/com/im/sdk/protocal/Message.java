@@ -45,18 +45,18 @@ public final class Message {
         getIdBytes();
 
     /**
-     * <code>optional string account = 4;</code>
+     * <code>optional string sender = 4;</code>
      */
-    boolean hasAccount();
+    boolean hasSender();
     /**
-     * <code>optional string account = 4;</code>
+     * <code>optional string sender = 4;</code>
      */
-    String getAccount();
+    String getSender();
     /**
-     * <code>optional string account = 4;</code>
+     * <code>optional string sender = 4;</code>
      */
     com.google.protobuf.ByteString
-        getAccountBytes();
+        getSenderBytes();
 
     /**
      * <code>optional string content = 5;</code>
@@ -133,7 +133,7 @@ public final class Message {
       cmd_ = 0;
       createTime_ = 0L;
       id_ = "";
-      account_ = "";
+      sender_ = "";
       content_ = "";
       ip_ = "";
       port_ = 0;
@@ -187,7 +187,7 @@ public final class Message {
             case 34: {
               com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000008;
-              account_ = bs;
+              sender_ = bs;
               break;
             }
             case 42: {
@@ -445,19 +445,19 @@ public final class Message {
       }
     }
 
-    public static final int ACCOUNT_FIELD_NUMBER = 4;
-    private volatile Object account_;
+    public static final int SENDER_FIELD_NUMBER = 4;
+    private volatile Object sender_;
     /**
-     * <code>optional string account = 4;</code>
+     * <code>optional string sender = 4;</code>
      */
-    public boolean hasAccount() {
+    public boolean hasSender() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>optional string account = 4;</code>
+     * <code>optional string sender = 4;</code>
      */
-    public String getAccount() {
-      Object ref = account_;
+    public String getSender() {
+      Object ref = sender_;
       if (ref instanceof String) {
         return (String) ref;
       } else {
@@ -465,22 +465,22 @@ public final class Message {
             (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
-          account_ = s;
+          sender_ = s;
         }
         return s;
       }
     }
     /**
-     * <code>optional string account = 4;</code>
+     * <code>optional string sender = 4;</code>
      */
     public com.google.protobuf.ByteString
-        getAccountBytes() {
-      Object ref = account_;
+        getSenderBytes() {
+      Object ref = sender_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
-        account_ = b;
+        sender_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -673,7 +673,7 @@ public final class Message {
         output.writeBytes(3, getIdBytes());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeBytes(4, getAccountBytes());
+        output.writeBytes(4, getSenderBytes());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeBytes(5, getContentBytes());
@@ -713,7 +713,7 @@ public final class Message {
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getAccountBytes());
+          .computeBytesSize(4, getSenderBytes());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
@@ -853,7 +853,7 @@ public final class Message {
         bitField0_ = (bitField0_ & ~0x00000002);
         id_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
-        account_ = "";
+        sender_ = "";
         bitField0_ = (bitField0_ & ~0x00000008);
         content_ = "";
         bitField0_ = (bitField0_ & ~0x00000010);
@@ -904,7 +904,7 @@ public final class Message {
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.account_ = account_;
+        result.sender_ = sender_;
         if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
           to_bitField0_ |= 0x00000010;
         }
@@ -952,9 +952,9 @@ public final class Message {
           id_ = other.id_;
           onChanged();
         }
-        if (other.hasAccount()) {
+        if (other.hasSender()) {
           bitField0_ |= 0x00000008;
-          account_ = other.account_;
+          sender_ = other.sender_;
           onChanged();
         }
         if (other.hasContent()) {
@@ -1152,24 +1152,24 @@ public final class Message {
         return this;
       }
 
-      private Object account_ = "";
+      private Object sender_ = "";
       /**
-       * <code>optional string account = 4;</code>
+       * <code>optional string sender = 4;</code>
        */
-      public boolean hasAccount() {
+      public boolean hasSender() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>optional string account = 4;</code>
+       * <code>optional string sender = 4;</code>
        */
-      public String getAccount() {
-        Object ref = account_;
+      public String getSender() {
+        Object ref = sender_;
         if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           String s = bs.toStringUtf8();
           if (bs.isValidUtf8()) {
-            account_ = s;
+            sender_ = s;
           }
           return s;
         } else {
@@ -1177,53 +1177,53 @@ public final class Message {
         }
       }
       /**
-       * <code>optional string account = 4;</code>
+       * <code>optional string sender = 4;</code>
        */
       public com.google.protobuf.ByteString
-          getAccountBytes() {
-        Object ref = account_;
+          getSenderBytes() {
+        Object ref = sender_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (String) ref);
-          account_ = b;
+          sender_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>optional string account = 4;</code>
+       * <code>optional string sender = 4;</code>
        */
-      public Builder setAccount(
+      public Builder setSender(
           String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000008;
-        account_ = value;
+        sender_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string account = 4;</code>
+       * <code>optional string sender = 4;</code>
        */
-      public Builder clearAccount() {
+      public Builder clearSender() {
         bitField0_ = (bitField0_ & ~0x00000008);
-        account_ = getDefaultInstance().getAccount();
+        sender_ = getDefaultInstance().getSender();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string account = 4;</code>
+       * <code>optional string sender = 4;</code>
        */
-      public Builder setAccountBytes(
+      public Builder setSenderBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000008;
-        account_ = value;
+        sender_ = value;
         onChanged();
         return this;
       }
@@ -1577,15 +1577,15 @@ public final class Message {
       descriptor;
   static {
     String[] descriptorData = {
-      "\n\rmessage.proto\022\023com.im.sdk.protocal\"\220\002\n" +
+      "\n\rmessage.proto\022\023com.im.sdk.protocal\"\217\002\n" +
       "\004Data\022\013\n\003cmd\030\001 \002(\005\022\023\n\013create_time\030\002 \002(\003\022" +
-      "\n\n\002id\030\003 \001(\t\022\017\n\007account\030\004 \001(\t\022\017\n\007content\030" +
-      "\005 \001(\t\022\n\n\002ip\030\006 \001(\t\022\014\n\004port\030\007 \001(\005\022\025\n\rlogin" +
-      "_success\030\010 \001(\010\022\020\n\010receiver\030\t \001(\t\"u\n\003Cmd\022" +
-      "\t\n\005LOGIN\020\000\022\n\n\006LOGOUT\020\001\022\020\n\014OTHER_LOGGIN\020\002" +
-      "\022\r\n\tHEARTBEAT\020\003\022\014\n\010CHAT_MSG\020\004\022\021\n\rCHAT_MS" +
-      "G_ECHO\020\005\022\025\n\021CHAT_OFFLINE_MSGS\020\006B\036\n\023com.i" +
-      "m.sdk.protocalB\007Message"
+      "\n\n\002id\030\003 \001(\t\022\016\n\006sender\030\004 \001(\t\022\017\n\007content\030\005" +
+      " \001(\t\022\n\n\002ip\030\006 \001(\t\022\014\n\004port\030\007 \001(\005\022\025\n\rlogin_" +
+      "success\030\010 \001(\010\022\020\n\010receiver\030\t \001(\t\"u\n\003Cmd\022\t" +
+      "\n\005LOGIN\020\000\022\n\n\006LOGOUT\020\001\022\020\n\014OTHER_LOGGIN\020\002\022" +
+      "\r\n\tHEARTBEAT\020\003\022\014\n\010CHAT_MSG\020\004\022\021\n\rCHAT_MSG" +
+      "_ECHO\020\005\022\025\n\021CHAT_OFFLINE_MSGS\020\006B\036\n\023com.im" +
+      ".sdk.protocalB\007Message"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -1604,7 +1604,7 @@ public final class Message {
     internal_static_com_im_sdk_protocal_Data_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_com_im_sdk_protocal_Data_descriptor,
-        new String[] { "Cmd", "CreateTime", "Id", "Account", "Content", "Ip", "Port", "LoginSuccess", "Receiver", });
+        new String[] { "Cmd", "CreateTime", "Id", "Sender", "Content", "Ip", "Port", "LoginSuccess", "Receiver", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

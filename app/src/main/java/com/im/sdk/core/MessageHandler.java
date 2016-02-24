@@ -149,7 +149,7 @@ public class MessageHandler {
         Log.i(TAG, "处理发送消息=====>>=====>>cmd["+data.getCmd());
         switch (data.getCmd()) {
             case Cmd.LOGIN_VALUE:
-                Log.i(TAG, "登录 account[" + data.getAccount());
+                Log.i(TAG, "登录 account[" + data.getSender());
                 break;
             case Cmd.HEARTBEAT_VALUE:
                 Log.i(TAG,"心跳消息 time[" + data.getCreateTime());
@@ -165,7 +165,7 @@ public class MessageHandler {
         Log.i(TAG, "处理收到消息<<======<<======cmd["+data.getCmd());
         switch (data.getCmd()) {
             case Cmd.LOGIN_VALUE:
-                if (TextUtils.isEmpty(data.getAccount())) {
+                if (TextUtils.isEmpty(data.getSender())) {
                     Log.i(TAG, "服务端登录请求    msg[" + data.getContent() );
                     listener.onReceiveMessage(data);
                 } else {
@@ -179,7 +179,7 @@ public class MessageHandler {
                 }
                 break;
             case Cmd.OTHER_LOGGIN_VALUE:
-                Log.i(TAG, "帐号别处登录     account["+data.getAccount());
+                Log.i(TAG, "帐号别处登录     account["+data.getSender());
                 listener.onReceiveMessage(data);
                 break;
             case Cmd.HEARTBEAT_VALUE:

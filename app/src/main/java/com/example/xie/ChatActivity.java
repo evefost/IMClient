@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.common.ui.base.BaseActivity;
 import com.example.xie.imclient.R;
 import com.im.sdk.core.ClientHandler;
-import com.im.sdk.dao.DaoMaster;
+
 import com.im.sdk.protocal.Message;
 
 
@@ -64,7 +64,7 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
         rcView.setAdapter(mAdapter);
         generDatas();
         mAdapter.notifyDataSetChanged();
-        DaoMaster.DevOpenHelper openHelper = new DaoMaster.DevOpenHelper(mContext, null, null);
+
     }
 
     @Override
@@ -86,9 +86,9 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
             Random random = new Random();
             boolean b = random.nextBoolean();
             if (b) {
-                data.setAccount("123");
+                data.setSender("123");
             } else {
-                data.setAccount("123456");
+                data.setSender("123456");
             }
             String ct = content.substring(0,random.nextInt(50));
             data.setContent(ct + i);
@@ -161,7 +161,7 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
         public int getItemViewType(int position) {
             Message.Data.Builder data = list.get(position);
 //            if(ClientApplication.mUser.getAccount().equals(data.getAccount())){
-            if (data.getAccount().equals("123")) {
+            if (data.getSender().equals("123")) {
                 return 0;
             } else {
                 return 1;
