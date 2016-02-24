@@ -32,6 +32,8 @@ public abstract class BaseFragment extends Fragment implements PageInterface {
         return mView;
     }
 
+
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -47,4 +49,18 @@ public abstract class BaseFragment extends Fragment implements PageInterface {
     public void setListeners() {
 
     }
+    @Override
+    public void hideTopBar(boolean flag){
+
+    }
+    @Override
+    public void setTitle(int resId) {
+        setTitle(getResources().getString(resId));
+    }
+
+    @Override
+    public void setTitle(String title){
+
+    }
+
 }

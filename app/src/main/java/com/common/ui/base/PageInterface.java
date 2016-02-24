@@ -18,4 +18,9 @@ public interface PageInterface {
     public void init(Bundle savedInstanceState);
 
     public void setListeners();
+
+    public void hideTopBar(boolean flag);
+    public void setTitle(int resId);
+
+    public void setTitle(String title);
 }

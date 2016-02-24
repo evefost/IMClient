@@ -58,6 +58,7 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
     @Override
     public void init(Bundle savedInstanceState) {
 
+        hideTopBar(true);
         prgs_send.setVisibility(View.INVISIBLE);
         IMClient.addEventListener(this);
 

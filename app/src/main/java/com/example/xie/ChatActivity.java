@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.common.ui.base.BaseActivity;
 import com.example.xie.imclient.R;
 import com.im.sdk.core.ClientHandler;
+import com.im.sdk.dao.DaoMaster;
 import com.im.sdk.protocal.Message;
 
 
@@ -54,11 +55,13 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
 
     @Override
     public void init(Bundle savedInstanceState) {
+        setTitle("chat...");
         mAdapter = new RcAdater();
         rcView.setLayoutManager(new LinearLayoutManager(mActivity));
         rcView.setAdapter(mAdapter);
         generDatas();
         mAdapter.notifyDataSetChanged();
+        DaoMaster.DevOpenHelper openHelper = new DaoMaster.DevOpenHelper(mContext, null, null);
     }
 
     @Override
