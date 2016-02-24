@@ -20,17 +20,19 @@ public class ClientApplication extends Application {
 
     private static Context instance;
 
-    public static User mUser;
+    public User mUser;
 
 
     private RefWatcher mRefWatcher;
-    public static Context instance(){
+
+    public static Context instance() {
         return instance;
     }
+
     @Override
     public void onCreate() {
         super.onCreate();
-       // enabledStrictMode();
+        // enabledStrictMode();
         mRefWatcher = LeakCanary.install(this);
         instance = this;
 
@@ -43,14 +45,28 @@ public class ClientApplication extends Application {
         IMClient.init(this);
         IMClient.instance().connect();
     }
-    private void enabledStrictMode() {
-        if (SDK_INT >= GINGERBREAD) {
-            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder() //
-                    .detectAll() //
-                    .penaltyLog() //
-                    .penaltyDeath() //
-                    .build());
+
+    public User getmUser() {
+        return mUser;
+    }
+
+    public void setmUser(User mUser) {
+        this.mUser = mUser;
+    }
+
+    public String getUid() {
+        if (mUser == null) {
+            return null;
+        } else {
+            return mUser.getUid();
         }
     }
 
+    public boolean isLogin() {
+        if (mUser != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

@@ -5,25 +5,16 @@ package com.examp.bean;
  */
 public class User {
 
-    public String id;
-    private String account;
+    public String uid;
 
     public String password;
 
-    public String getId() {
-        return id;
+    public String getUid() {
+        return uid;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getPassword() {

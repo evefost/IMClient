@@ -99,7 +99,9 @@ public class MessageHandler {
 
         mChannel = channel;
         //必须设置发送时间
-        msg.setCreateTime(System.currentTimeMillis());
+        if(0==msg.getCreateTime()){
+            msg.setCreateTime(System.currentTimeMillis());
+        }
         proccessSendMessage(msg);
         push(msg);
         mExecutor.execute(new Runnable() {

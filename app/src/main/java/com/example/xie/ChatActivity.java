@@ -12,16 +12,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.common.ui.base.BaseActivity;
+import com.examp.bean.LocalMessage;
 import com.example.xie.imclient.R;
 import com.im.sdk.core.ClientHandler;
-
+import com.im.sdk.core.IMClient;
 import com.im.sdk.protocal.Message;
-
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 
 /**
  * Created by xie on 2016/2/1.
@@ -31,8 +30,9 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
 
     private  String TAG = getClass().getSimpleName();
 
-    public static void lauchActivity(Activity activity, String account) {
+    public static void lauchActivity(Activity activity, String uid) {
         Intent intent = new Intent(activity.getApplicationContext(), ChatActivity.class);
+        intent.putExtra("uid",uid);
         activity.startActivity(intent);
     }
 
@@ -54,10 +54,13 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
     }
 
     private RcAdater mAdapter;
-    List<Message.Data.Builder> list = new ArrayList<Message.Data.Builder>();
+    List<LocalMessage> messageList = new ArrayList<LocalMessage>();
+
+    private String receiverId;
 
     @Override
     public void init(Bundle savedInstanceState) {
+        receiverId = getIntent().getStringExtra("uid");
         setTitle("chat...");
         mAdapter = new RcAdater();
         rcView.setLayoutManager(new LinearLayoutManager(mActivity));
@@ -73,7 +76,17 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
         tv_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Message.Data.Builder msg = Message.Data.newBuilder();
+                msg.setCmd(Message.Data.Cmd.CHAT_MSG_VALUE);
+                msg.setCreateTime(System.currentTimeMillis());
+                msg.setSender(mApp.getUid());
+                msg.setReceiver(receiverId);
+                Random random = new Random();
+                String ct = content.substring(0,random.nextInt(50));
+                msg.setContent(ct);
+                LocalMessage localMessage = new LocalMessage(msg);
+                messageList.add(localMessage);
+                IMClient.instance().sendMessage(msg);
             }
         });
     }
@@ -86,13 +99,14 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
             Random random = new Random();
             boolean b = random.nextBoolean();
             if (b) {
-                data.setSender("123");
+                data.setSender(mApp.getUid());
             } else {
-                data.setSender("123456");
+                data.setSender(receiverId);
             }
             String ct = content.substring(0,random.nextInt(50));
             data.setContent(ct + i);
-            list.add(data);
+            LocalMessage localMessage = new LocalMessage(data);
+            messageList.add(localMessage);
 
 
         }
@@ -117,7 +131,9 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
     @Override
     public void onReceiveMessage(Message.Data msg) {
         if(msg.getCmd() == Message.Data.Cmd.CHAT_MSG_VALUE){
-
+            LocalMessage localMessage = new LocalMessage(msg);
+            messageList.add(localMessage);
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -152,16 +168,17 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            Message.Data.Builder data = list.get(position);
+            LocalMessage localMessage = messageList.get(position);
+            Message.Data data = localMessage.getData();
             ViewHolder vholder = (ViewHolder) holder;
             vholder.tv_message.setText(data.getContent());
         }
 
         @Override
         public int getItemViewType(int position) {
-            Message.Data.Builder data = list.get(position);
-//            if(ClientApplication.mUser.getAccount().equals(data.getAccount())){
-            if (data.getSender().equals("123")) {
+            LocalMessage localMessage = messageList.get(position);
+            Message.Data data = localMessage.getData();
+            if (data.getSender().equals(mApp.getUid())) {
                 return 0;
             } else {
                 return 1;
@@ -170,7 +187,7 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
 
         @Override
         public int getItemCount() {
-            return list.size();
+            return messageList.size();
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {

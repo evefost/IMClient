@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.xie.ClientApplication;
 import com.example.xie.imclient.R;
 import com.zhy.autolayou.AutoLayoutActivity;
 
@@ -22,6 +23,7 @@ import java.io.Serializable;
  */
 public abstract class BaseActivity extends AutoLayoutActivity implements PageInterface {
 
+    protected ClientApplication mApp;
     protected  Context mContext = null;
     protected Activity mActivity = null;
 
@@ -48,6 +50,7 @@ public abstract class BaseActivity extends AutoLayoutActivity implements PageInt
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mApp = (ClientApplication) getApplicationContext();
         mContext = getApplicationContext();
         this.mActivity = this;
 
