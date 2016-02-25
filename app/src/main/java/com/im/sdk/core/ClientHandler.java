@@ -59,7 +59,7 @@ public class ClientHandler extends ChannelHandlerAdapter {
         cause.printStackTrace();
         ctx.close();
         if (mListener != null) {
-            mListener.onDisconnected();
+            mListener.onDisconnected(true);
         }
     }
 
@@ -67,7 +67,7 @@ public class ClientHandler extends ChannelHandlerAdapter {
         Log.i("EchoClientHandler", "channelInactive 服务器断开");
         ctx.close();
         if (mListener != null) {
-            mListener.onDisconnected();
+            mListener.onDisconnected(false);
         }
     }
 
@@ -101,7 +101,7 @@ public class ClientHandler extends ChannelHandlerAdapter {
 
         public void onConnected();
 
-        public void onDisconnected();
+        public void onDisconnected(boolean isException);
 
     }
 

@@ -44,4 +44,13 @@
     </RelativeLayout>
 
 
+    <TextView
+        android:id="@+id/tv_connect_state"
+        android:layout_width="fill_parent"
+        android:background="#E20C0C"
+        android:text="--"
+        android:textSize="42px"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:layout_height="80px" />
 </RelativeLayout>

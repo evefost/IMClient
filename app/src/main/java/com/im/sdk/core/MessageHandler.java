@@ -172,12 +172,13 @@ public class MessageHandler {
                     listener.onReceiveMessage(data);
                 } else {
                     Log.i(TAG, "登录结果 LoginSuccess["+data.getLoginSuccess());
-                    HeartBeatManager.instance().startHeartBeat();
                     //移除发送消息
                     Message.Data.Builder pop = pop(data.getCreateTime());
-                    pop.setLoginSuccess(data.getLoginSuccess());
-                    pop.setContent(data.getContent());
-                    IMClient.instance().onSendSucceed(pop);
+                    if(pop != null){
+                        pop.setLoginSuccess(data.getLoginSuccess());
+                        pop.setContent(data.getContent());
+                        IMClient.instance().onSendSucceed(pop);
+                    }
                 }
                 break;
             case Cmd.OTHER_LOGGIN_VALUE:
@@ -196,10 +197,12 @@ public class MessageHandler {
             case Message.Data.Cmd.CHAT_MSG_ECHO_VALUE:
                 Log.i(TAG, "消息回应,发送成功   time["+data.getCreateTime());
                 Message.Data.Builder pop = pop(data.getCreateTime());
-                Log.i(TAG, "createTime:" + data.getCreateTime() + "==pop:" + pop.getContent());
-                pop.setCmd(Cmd.CHAT_MSG_ECHO_VALUE);
-                //移除发送消息
-                IMClient.instance().onSendSucceed(pop);
+                if(pop != null){
+                    Log.i(TAG, "createTime:" + data.getCreateTime() + "==pop:" + pop.getContent());
+                    pop.setCmd(Cmd.CHAT_MSG_ECHO_VALUE);
+                    //移除发送消息
+                    IMClient.instance().onSendSucceed(pop);
+                }
                 break;
         }
     }

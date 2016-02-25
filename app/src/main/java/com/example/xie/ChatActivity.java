@@ -36,7 +36,7 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
         activity.startActivity(intent);
     }
 
-    String content ="这是测试内容这是测试容这这是测试内容这是测试内容容这这是测试内容这是测试内容容这这是测试内容这是测试内容容这是测试内容这是测试内容容这是测试内容这是测试内容容这是测试内容这是测试内容容这是测试内容这是测试内容容这是测试内容这是测试内容内容这是测试内容这是测试内容这是测试内容这是测试内容这是测试内容这是测试内容这是测试内容这是测试内容这是测试内容这是测试内容";
+    String content ="这是测试内容这是测试容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测试内容这是测试内容容这这是测试内容这是测试内容容这这是测试内容这是测试内容容这是测试内容这是测试内容容这是测试内容这是测试内容容这是测试内容这是测试内容容这是测试内容这是测试内容容这是测试内容这是测试内测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测试内容这是测试内容容这这是测试内容这是测试内容容这这是测试内容这是测试内容容这是测试内容这是测试内容容这是测试内容这是测试内容容这是测试内容这是测试内容容这是测试内容这是测试内容容这是测试内容这是测试内测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测试内容这是测试内容容这这是测试内容这是测试内容容这这是测试内容这是测试内容容这是测试内容这是测试内容容这是测试内容这是测试内容容这是测试内容这是测试内容容这是测试内容这是测试内容容这是测试内容这是测试内测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测这这是测试内容这是测试内容容这这是测试内容这是测试内容容这这是测试内容这是测试内容容这这是测试内容这是测试内容容这是测试内容这是测试内容容这是测试内容这是测试内容容这是测试内容这是测试内容容这是测试内容这是测试内容容这是测试内容这是测试内容内容这是测试内容这是测试内容这是测试内容这是测试内容这是测试内容这是测试内容这是测试内容这是测试内容这是测试内容这是测试内容";
     @Override
     public int getLayoutId() {
         return R.layout.chat_layout;
@@ -45,8 +45,11 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
     private RecyclerView rcView;
     private EditText et_input;
     private TextView tv_send;
+    private TextView tv_connect_state;
     @Override
     public void findViews() {
+
+        tv_connect_state = (TextView) findViewById(R.id.tv_connect_state);
 
         rcView = (RecyclerView) findViewById(R.id.rcView);
         et_input = (EditText) findViewById(R.id.et_input);
@@ -60,8 +63,13 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
 
     @Override
     public void init(Bundle savedInstanceState) {
-        receiverId = getIntent().getStringExtra("uid");
-        setTitle("chat...");
+        IMClient.instance().addEventListener(this);
+        receiverId = getIntent().getStringExtra("uid")==null?"":getIntent().getStringExtra("uid");
+        setTitle("与" + receiverId);
+        tv_connect_state.setText(IMClient.instance().isConnecting()?"连接中...":"服务器已断开..");
+        tv_connect_state.setVisibility(IMClient.instance().isConnected() ? View.GONE : View.VISIBLE);
+
+
         mAdapter = new RcAdater();
         rcView.setLayoutManager(new LinearLayoutManager(mActivity));
         rcView.setAdapter(mAdapter);
@@ -70,6 +78,11 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
 
     }
 
+    @Override
+    public void  onDestroy(){
+        super.onDestroy();
+        IMClient.instance().removeEventListener(this);
+    }
     @Override
     public void setListeners() {
         super.setListeners();
@@ -82,7 +95,7 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
                 msg.setSender(mApp.getUid());
                 msg.setReceiver(receiverId);
                 Random random = new Random();
-                String ct = content.substring(0,random.nextInt(50));
+                String ct = content.substring(2,random.nextInt(120));
                 msg.setContent(ct);
                 LocalMessage localMessage = new LocalMessage(msg);
                 messageList.add(localMessage);
@@ -105,6 +118,7 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
             }
             String ct = content.substring(0,random.nextInt(50));
             data.setContent(ct + i);
+            data.setCreateTime(System.currentTimeMillis());
             LocalMessage localMessage = new LocalMessage(data);
             messageList.add(localMessage);
 
@@ -125,7 +139,8 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
 
     @Override
     public void onConnectFailure(String msg) {
-
+        tv_connect_state.setText("连接失败..");
+        tv_connect_state.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -139,16 +154,20 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
 
     @Override
     public void onConnected() {
-
+        tv_connect_state.setVisibility(View.GONE);
     }
 
     @Override
-    public void onDisconnected() {
-
+    public void onDisconnected(boolean isException) {
+        Log.i(TAG, "onDisconnected");
+        tv_connect_state.setText("服务器已断开..");
+        tv_connect_state.setVisibility(View.VISIBLE);
     }
     @Override
     public void onConnecting() {
         Log.i(TAG, "onConnecting");
+        tv_connect_state.setText("连接中..");
+        tv_connect_state.setVisibility(View.VISIBLE);
     }
 
     private class RcAdater extends RecyclerView.Adapter {

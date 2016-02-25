@@ -3,12 +3,15 @@ package com.example.xie;
 import android.app.Application;
 import android.content.Context;
 import android.os.StrictMode;
+import android.util.Log;
 
 import com.examp.bean.User;
 import com.im.sdk.core.IMClient;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import com.zhy.autolayout.config.AutoLayoutConifg;
+
+import java.util.UUID;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.GINGERBREAD;
@@ -18,6 +21,7 @@ import static android.os.Build.VERSION_CODES.GINGERBREAD;
  */
 public class ClientApplication extends Application {
 
+    private  String TAG = getClass().getSimpleName() ;
     private static Context instance;
 
     public User mUser;
@@ -42,8 +46,16 @@ public class ClientApplication extends Application {
     private void init() {
 
         AutoLayoutConifg.getInstance().useDeviceSize().init(this);
+
+        mUser = new User();
+        String uuid = UUID.randomUUID().toString();
+        uuid = uuid.replace("-","");
+        Log.i(TAG, "uuid:" + uuid);
+        mUser.setUid(uuid);
         IMClient.init(this);
         IMClient.instance().connect();
+
+
     }
 
     public User getmUser() {
@@ -56,7 +68,7 @@ public class ClientApplication extends Application {
 
     public String getUid() {
         if (mUser == null) {
-            return null;
+            return "";
         } else {
             return mUser.getUid();
         }

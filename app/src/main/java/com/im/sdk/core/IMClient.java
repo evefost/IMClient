@@ -51,10 +51,16 @@ public final class IMClient implements ClientHandler.IMEventListener {
 
     public String TAG = getClass().getSimpleName();
 
+    public static final int STATU_DISCONNECT = 0;
+    public static final int STATU_CONNECTING = 1;
+    public static final int STATU_CONNECTED = 2;
+
+    private int connect_status = STATU_DISCONNECT;
+
     /**
      * 服务端地址
      */
-    static final String HOST = "192.168.1.2";
+    static final String HOST = "192.168.60.91";
     /**
      * 服务端端口
      */
@@ -75,7 +81,8 @@ public final class IMClient implements ClientHandler.IMEventListener {
     private ExecutorService executor;
 
     private String account = "123456";
-    private boolean isConnecting;
+
+    private int reconectTimes = 3;
 
     private IMClient() {
         init();
@@ -84,6 +91,10 @@ public final class IMClient implements ClientHandler.IMEventListener {
         if (mInstance == null) {
             mInstance = new IMClient();
         }
+    }
+
+    public boolean isConnecting(){
+        return connect_status == STATU_CONNECTING;
     }
 
     public static IMClient instance() {
@@ -115,8 +126,11 @@ public final class IMClient implements ClientHandler.IMEventListener {
     }
 
     public boolean reconnect() {
-        //TODO SOMETHING
-        connect();
+
+        if(reconectTimes>0){
+            connect();
+            return true;
+        }
         return false;
     }
 
@@ -128,13 +142,13 @@ public final class IMClient implements ClientHandler.IMEventListener {
 
                 if (channel != null && channel.isActive()) {
                     Log.i(TAG, "已连接服务器");
-                    isConnecting = false;
+                    connect_status = STATU_CONNECTED;
                     return;
                 }
                 Log.i(TAG, "启动连接服务器");
                 ChannelFuture f = null;
                 try {
-                    isConnecting = true;
+                    connect_status = STATU_CONNECTING;
                     onConnecting();
                     f = bootstrap.connect(HOST, PORT).sync();
                     f.addListener(new ChannelFutureListener() {
@@ -150,7 +164,7 @@ public final class IMClient implements ClientHandler.IMEventListener {
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.i(TAG, "connect EX" + e.toString());
-                    isConnecting = false;
+                    connect_status = STATU_DISCONNECT;
                     onConnectFailure(e.toString());
 
                 } finally {
@@ -173,6 +187,7 @@ public final class IMClient implements ClientHandler.IMEventListener {
             channel.close();
         }
         channel = null;
+        connect_status = STATU_DISCONNECT;
     }
 
     public void destroy() {
@@ -182,6 +197,7 @@ public final class IMClient implements ClientHandler.IMEventListener {
 
     public boolean isConnected() {
         if (channel != null && channel.isActive()) {
+            connect_status = STATU_CONNECTED;
             return true;
         }
         return false;
@@ -190,41 +206,49 @@ public final class IMClient implements ClientHandler.IMEventListener {
     @Override
     public void onReceiveMessage(final Message.Data message) {
         Log.i(TAG, " onReceiveMessage ");
-        notifyListener(message, EVENT_RECEIVE_MESSAGE);
+        notifyListener(false,message, EVENT_RECEIVE_MESSAGE);
     }
 
     @Override
     public void onConnected() {
-        isConnecting = false;
+        HeartBeatManager.instance().startHeartBeat();
+        reconectTimes = 3;
+        connect_status = STATU_CONNECTED;
         Log.i(TAG, " onConnected ");
-        notifyListener(null, EVENT_CONNECTED);
+        notifyListener(false,null, EVENT_CONNECTED);
         mMessageHandler.onConnected();
     }
 
     @Override
-    public void onDisconnected() {
+    public void onDisconnected(boolean isException) {
+        HeartBeatManager.instance().reset();
         Log.i(TAG, "onDisconnected ");
-        notifyListener(null, EVENT_DISCONNECTED);
+        connect_status = STATU_DISCONNECT;
+        notifyListener(isException,null, EVENT_DISCONNECTED);
+        if(isException){
+            reconnect();
+        }
     }
 
     @Override
     public void onSendFailure(Message.Data.Builder msg) {
-        notifyListener(msg, EVENT_SEND_FAILURE);
+        notifyListener(false,msg, EVENT_SEND_FAILURE);
     }
 
     @Override
     public void onSendSucceed(Message.Data.Builder msg) {
-        notifyListener(msg, EVENT_SEND_SUCCESS);
+        notifyListener(false,msg, EVENT_SEND_SUCCESS);
     }
 
     @Override
     public void onConnectFailure(String msg) {
-        notifyListener(msg, EVENT_CONNECT_FAILURE);
+        reconectTimes--;
+        notifyListener(false,msg, EVENT_CONNECT_FAILURE);
     }
 
     @Override
     public void onConnecting() {
-        notifyListener(null, EVENT_CONNECT_ING);
+        notifyListener(false,null, EVENT_CONNECT_ING);
     }
 
 
@@ -234,7 +258,7 @@ public final class IMClient implements ClientHandler.IMEventListener {
      * @param message
      * @param EVENT
      */
-    private void notifyListener(final Object message, final int EVENT) {
+    private void notifyListener(final boolean isException,final Object message, final int EVENT) {
         mUIhander.post(new Runnable() {
             @Override
             public void run() {
@@ -244,7 +268,7 @@ public final class IMClient implements ClientHandler.IMEventListener {
                         listener.onConnected();
                     } else if (EVENT == EVENT_DISCONNECTED) {
                         Log.i(TAG, "服务器已断开");
-                        listener.onDisconnected();
+                        listener.onDisconnected(isException);
                     } else if (EVENT == EVENT_RECEIVE_MESSAGE) {
                         Log.i(TAG, "收到消息，处理各类消息");
                         mMessageHandler.handReceiveMsg((Message.Data) message, listener);

@@ -33,12 +33,11 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
     private Button btn_connect;
     private Button btn_disconnect;
     private EditText account;
+
     private Button bt_login;
     private Button logout;
-    private Button bt_send_message;
     private Button login_status;
-    private Button btn_chat;
-    private ProgressBar prgs_send;
+    private Button btn_onlin_users;
 
     @Override
     public void findViews() {
@@ -46,24 +45,20 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
         tv_status = (TextView) findViewById(R.id.tv_status);
         bt_login = (Button) findViewById(R.id.bt_login);
         logout = (Button) findViewById(R.id.logout);
-        bt_send_message = (Button) findViewById(R.id.bt_send_message);
 
         btn_connect = (Button) findViewById(R.id.btn_connect);
         btn_disconnect = (Button) findViewById(R.id.btn_disconnect);
         login_status = (Button) findViewById(R.id.login_status);
-        btn_chat = (Button) findViewById(R.id.btn_chat);
-        prgs_send = (ProgressBar) findViewById(R.id.prgs_send);
-
+        btn_onlin_users = (Button) findViewById(R.id.btn_onlin_users);
     }
 
     @Override
     public void init(Bundle savedInstanceState) {
 
         hideTopBar(true);
-        prgs_send.setVisibility(View.INVISIBLE);
+        account.setText(mApp.getUid());
         IMClient.addEventListener(this);
-
-        tv_status.setText(IMClient.instance().isConnected() ? "is contected" : "is disconnected");
+        tv_status.setText(IMClient.instance().isConnected() ? "server is contected" : "server is disconnected");
 
     }
 
@@ -76,8 +71,7 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
         btn_disconnect.setOnClickListener(this);
         bt_login.setOnClickListener(this);
         logout.setOnClickListener(this);
-        btn_chat.setOnClickListener(this);
-        bt_send_message.setOnClickListener(this);
+        btn_onlin_users.setOnClickListener(this);
     }
 
     @Override
@@ -90,7 +84,7 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
             login_status.setText("未登录");
             Message.Data.Builder accountInfo = Message.Data.newBuilder();
             accountInfo.setCmd(Message.Data.Cmd.LOGIN_VALUE);
-            accountInfo.setSender("xieyang123");
+            accountInfo.setSender(mApp.getUid());
             IMClient.instance().sendMessage(accountInfo);
         }
 
@@ -110,7 +104,7 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
     }
 
     @Override
-    public void onDisconnected() {
+    public void onDisconnected(boolean isException) {
         tv_status.setText("on disconnected");
         Log.i(TAG, "onDisconnected");
     }
@@ -121,9 +115,8 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
         Log.i(TAG, "onSendFailure");
         if (msg.getCmd() == Message.Data.Cmd.LOGIN_VALUE) {
             Log.i(TAG, "登录失败");
-        } else if (msg.getCmd() == Cmd.CHAT_MSG_VALUE){
-            prgs_send.setVisibility(View.INVISIBLE);
-            bt_send_message.setVisibility(View.VISIBLE);
+        } else if (msg.getCmd() == Cmd.CHAT_MSG_VALUE) {
+
         }
     }
 
@@ -137,8 +130,7 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
             }
         } else if (msg.getCmd() == Cmd.CHAT_MSG_ECHO_VALUE) {
             Log.i(TAG, "发送成功");
-            prgs_send.setVisibility(View.INVISIBLE);
-            bt_send_message.setVisibility(View.VISIBLE);
+
         }
     }
 
@@ -146,8 +138,7 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
     public void onConnectFailure(String msg) {
         Log.i(TAG, "onConnectFailure" + msg);
         tv_status.setText("连接失败....");
-        prgs_send.setVisibility(View.INVISIBLE);
-        bt_send_message.setVisibility(View.VISIBLE);
+
     }
 
 
@@ -171,7 +162,7 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
             case R.id.bt_login:
                 Message.Data.Builder accountInfo = Message.Data.newBuilder();
                 accountInfo.setCmd(Message.Data.Cmd.LOGIN_VALUE);
-                accountInfo.setSender("xieyang123");
+                accountInfo.setSender(mApp.getUid());
                 IMClient.instance().sendMessage(accountInfo);
                 break;
 
@@ -181,8 +172,7 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
                 IMClient.instance().sendMessage(data);
                 break;
             case R.id.bt_send_message:
-                prgs_send.setVisibility(View.VISIBLE);
-                bt_send_message.setVisibility(View.INVISIBLE);
+
                 Log.i(TAG, "发送");
                 sentcont++;
                 Message.Data.Builder msg = Message.Data.newBuilder();
@@ -195,9 +185,8 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
 
                 Log.i(TAG, "send data content:" + sdata.getContent());
                 break;
-            case R.id.btn_chat:
-                ChatActivity.lauchActivity(this, ChatActivity.class);
-//                startActivity(new Intent(this, DemoActivity.class));
+            case R.id.btn_onlin_users:
+                OnLineUsersListActivity.lauchActivity(this, OnLineUsersListActivity.class);
                 break;
         }
     }
