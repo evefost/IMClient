@@ -204,6 +204,11 @@ public class MessageHandler {
                     IMClient.instance().onSendSucceed(pop);
                 }
                 break;
+            case Cmd.MINE_FRIENDS_VALUE:
+                Log.i(TAG, "消息回应,好友列表"+data.getContent());
+                Message.Data.Builder pop2 = pop(data.getCreateTime());
+                listener.onReceiveMessage(data);
+                break;
         }
     }
 
