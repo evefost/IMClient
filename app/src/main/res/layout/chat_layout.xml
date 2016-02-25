@@ -23,6 +23,7 @@
             android:id="@+id/et_input"
             android:textSize="36px"
             android:layout_marginRight="15px"
+
             android:hint="..."
 
             android:background="@drawable/bg_round_glay_border"
