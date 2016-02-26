@@ -276,6 +276,10 @@ public final class Message {
        * <code>CHAT_OFFLINE_MSGS = 6;</code>
        */
       CHAT_OFFLINE_MSGS(6, 6),
+      /**
+       * <code>MINE_FRIENDS = 7;</code>
+       */
+      MINE_FRIENDS(7, 7),
       ;
 
       /**
@@ -306,6 +310,10 @@ public final class Message {
        * <code>CHAT_OFFLINE_MSGS = 6;</code>
        */
       public static final int CHAT_OFFLINE_MSGS_VALUE = 6;
+      /**
+       * <code>MINE_FRIENDS = 7;</code>
+       */
+      public static final int MINE_FRIENDS_VALUE = 7;
 
 
       public final int getNumber() {
@@ -321,6 +329,7 @@ public final class Message {
           case 4: return CHAT_MSG;
           case 5: return CHAT_MSG_ECHO;
           case 6: return CHAT_OFFLINE_MSGS;
+          case 7: return MINE_FRIENDS;
           default: return null;
         }
       }
@@ -1577,15 +1586,16 @@ public final class Message {
       descriptor;
   static {
     String[] descriptorData = {
-      "\n\rmessage.proto\022\023com.im.sdk.protocal\"\217\002\n" +
+      "\n\rmessage.proto\022\023com.im.sdk.protocal\"\242\002\n" +
       "\004Data\022\013\n\003cmd\030\001 \002(\005\022\023\n\013create_time\030\002 \002(\003\022" +
       "\n\n\002id\030\003 \001(\t\022\016\n\006sender\030\004 \001(\t\022\017\n\007content\030\005" +
       " \001(\t\022\n\n\002ip\030\006 \001(\t\022\014\n\004port\030\007 \001(\005\022\025\n\rlogin_" +
-      "success\030\010 \001(\010\022\020\n\010receiver\030\t \001(\t\"u\n\003Cmd\022\t" +
-      "\n\005LOGIN\020\000\022\n\n\006LOGOUT\020\001\022\020\n\014OTHER_LOGGIN\020\002\022" +
-      "\r\n\tHEARTBEAT\020\003\022\014\n\010CHAT_MSG\020\004\022\021\n\rCHAT_MSG" +
-      "_ECHO\020\005\022\025\n\021CHAT_OFFLINE_MSGS\020\006B\036\n\023com.im" +
-      ".sdk.protocalB\007Message"
+      "success\030\010 \001(\010\022\020\n\010receiver\030\t \001(\t\"\207\001\n\003Cmd\022" +
+      "\t\n\005LOGIN\020\000\022\n\n\006LOGOUT\020\001\022\020\n\014OTHER_LOGGIN\020\002" +
+      "\022\r\n\tHEARTBEAT\020\003\022\014\n\010CHAT_MSG\020\004\022\021\n\rCHAT_MS" +
+      "G_ECHO\020\005\022\025\n\021CHAT_OFFLINE_MSGS\020\006\022\020\n\014MINE_" +
+      "FRIENDS\020\007B\036\n\023com.im.sdk.protocalB\007Messag" +
+      "e"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
