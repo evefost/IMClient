@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -53,7 +54,7 @@ public abstract class BaseActivity extends AutoLayoutActivity implements PageInt
         mApp = (ClientApplication) getApplicationContext();
         mContext = getApplicationContext();
         this.mActivity = this;
-
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         mContentView = new LinearLayout(this);
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
@@ -82,6 +83,10 @@ public abstract class BaseActivity extends AutoLayoutActivity implements PageInt
     @Override
     public void hideTopBar(boolean flag){
         mHeaderView.setVisibility(flag?View.GONE:View.VISIBLE);
+    }
+
+    public void hideBack(boolean flag){
+        rl_left.setVisibility(flag?View.GONE:View.VISIBLE);
     }
     @Override
     public void setListeners() {

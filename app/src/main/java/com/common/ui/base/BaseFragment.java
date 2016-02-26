@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,22 +13,31 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.xie.ClientApplication;
 import com.example.xie.imclient.R;
+import com.im.sdk.core.IMClient;
 
 /**
  * Created by mis on 2016/2/17.
  */
 public abstract class BaseFragment extends Fragment implements PageInterface {
-
+    protected ClientApplication mApp;
     protected Context mContext = null;
     protected Activity mActivity = null;
 
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mContext = getContext().getApplicationContext();
+        mApp = (ClientApplication) getContext().getApplicationContext();
+        mActivity = getActivity();
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mContext = getContext().getApplicationContext();
-        mActivity = getActivity();
+
     }
 
     private LinearLayout mContentView;
@@ -74,11 +84,14 @@ public abstract class BaseFragment extends Fragment implements PageInterface {
 
     @Override
     public void setListeners() {
-
     }
     @Override
     public void hideTopBar(boolean flag){
+        mHeaderView.setVisibility(flag?View.GONE:View.VISIBLE);
+    }
 
+    public void hideBack(boolean flag){
+        rl_left.setVisibility(flag?View.GONE:View.VISIBLE);
     }
     @Override
     public void setTitle(int resId) {
@@ -89,5 +102,10 @@ public abstract class BaseFragment extends Fragment implements PageInterface {
     public void setTitle(String title){
 
     }
+
+
+
+
+
 
 }

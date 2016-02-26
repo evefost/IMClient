@@ -20,6 +20,8 @@ public interface PageInterface {
     public void setListeners();
 
     public void hideTopBar(boolean flag);
+
+    public void hideBack(boolean flag);
     public void setTitle(int resId);
 
     public void setTitle(String title);
