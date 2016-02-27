@@ -41,6 +41,7 @@ public class IMTestActivity extends BaseActivity implements ClientHandler.IMEven
 
     @Override
     public void findViews() {
+
         account = (EditText) findViewById(R.id.account);
         tv_status = (TextView) findViewById(R.id.tv_status);
         bt_login = (Button) findViewById(R.id.bt_login);
