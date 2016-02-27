@@ -42,7 +42,7 @@ public class UserListFragment extends BaseFragment implements ClientHandler.IMEv
 
     @Override
     public void init(Bundle savedInstanceState) {
-
+        hideTopBar(true);
         setTitle("当前在线用户");
         IMClient.addEventListener(this);
         mAdapter = new RcAdater();

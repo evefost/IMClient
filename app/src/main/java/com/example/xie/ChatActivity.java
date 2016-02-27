@@ -94,12 +94,15 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
                 msg.setCreateTime(System.currentTimeMillis());
                 msg.setSender(mApp.getUid());
                 msg.setReceiver(receiverId);
-                Random random = new Random();
-                String ct = content.substring(2,random.nextInt(120));
+                String ct = et_input.getText().toString().trim();
                 msg.setContent(ct);
+                et_input.setText("");
                 LocalMessage localMessage = new LocalMessage(msg);
-                messageList.add(localMessage);
+             ;
                 IMClient.instance().sendMessage(msg);
+                messageList.add(localMessage);
+                mAdapter.notifyDataSetChanged();
+                rcView.scrollToPosition(messageList.size()-1);
             }
         });
     }
