@@ -340,4 +340,9 @@
     <dimen name="widget_vip_speed_marginTop">3.0dip</dimen>
     <dimen name="widget_vip_progress_text_marginLeft">2.0dip</dimen>
     <dimen name="widget_vip_progress_text_marginRight">4.0dip</dimen>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="common_margin">16dip</dimen>
 </resources>

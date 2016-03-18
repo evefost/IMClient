@@ -167,18 +167,18 @@ public class HomeFragment extends BaseFragment implements ClientHandler.IMEventL
                 data.setCmd(Message.Data.Cmd.LOGOUT_VALUE);
                 IMClient.instance().sendMessage(data);
                 break;
-            case R.id.bt_send_message:
-
-                Log.i(TAG, "发送");
-                sentcont++;
-                Message.Data.Builder msg = Message.Data.newBuilder();
-                msg.setCmd(Message.Data.Cmd.CHAT_MSG_VALUE);
-                //msg.setId("id"+sentcont);
-                msg.setContent("第" + sentcont + "发送");
-                IMClient.instance().sendMessage(msg);
-                Message.Data sdata = msg.build();
-                Log.i(TAG, "send data content:" + sdata.getContent());
-                break;
+//            case R.id.bt_send_message:
+//
+//                Log.i(TAG, "发送");
+//                sentcont++;
+//                Message.Data.Builder msg = Message.Data.newBuilder();
+//                msg.setCmd(Message.Data.Cmd.CHAT_MSG_VALUE);
+//                //msg.setId("id"+sentcont);
+//                msg.setContent("第" + sentcont + "发送");
+//                IMClient.instance().sendMessage(msg);
+//                Message.Data sdata = msg.build();
+//                Log.i(TAG, "send data content:" + sdata.getContent());
+//                break;
         }
     }
 

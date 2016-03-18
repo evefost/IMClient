@@ -5,7 +5,7 @@
       <GradleProjectSettings>
         <option name="distributionType" value="LOCAL" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleHome" value="D:/soft/gradle-2.10-bin/gradle-2.10" />
+        <option name="gradleHome" value="H:/worksofts/gradle-2.12-all/gradle-2.12" />
         <option name="gradleJvm" value="1.8" />
         <option name="modules">
           <set>
@@ -13,6 +13,16 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/autolayout" />
             <option value="$PROJECT_DIR$/generatedao" />
+            <option value="$PROJECT_DIR$/swipebacklib" />
+          </set>
+        </option>
+        <option name="myModules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/autolayout" />
+            <option value="$PROJECT_DIR$/generatedao" />
+            <option value="$PROJECT_DIR$/swipebacklib" />
           </set>
         </option>
       </GradleProjectSettings>

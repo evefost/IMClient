@@ -1,1 +1,1 @@
-include ':app', ':autolayout', ':generatedao'
+include ':app', ':autolayout', ':generatedao', ':swipebacklib'
