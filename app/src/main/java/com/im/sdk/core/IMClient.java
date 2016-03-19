@@ -22,6 +22,7 @@ import android.util.Log;
 
 
 import com.example.xie.ClientApplication;
+import com.example.xie.Constants;
 import com.im.sdk.protocal.Message;
 import com.im.sdk.protocal.ProtobufDecoder;
 import com.im.sdk.protocal.ProtobufEncoder;
@@ -58,14 +59,6 @@ public final class IMClient implements ClientHandler.IMEventListener {
     private int connect_status = STATU_DISCONNECT;
 
     /**
-     * 服务端地址
-     */
-    static final String HOST = "192.168.60.91";
-    /**
-     * 服务端端口
-     */
-    static final int PORT = 53456;
-    /**
      * 消息事件监听集
      */
     private static final List<ClientHandler.IMEventListener> mIMEventListener = new ArrayList<ClientHandler.IMEventListener>();
@@ -80,7 +73,7 @@ public final class IMClient implements ClientHandler.IMEventListener {
     private Handler mUIhander;
     private ExecutorService executor;
 
-    private String account = "123456";
+
 
     private int reconectTimes = 3;
 
@@ -150,7 +143,7 @@ public final class IMClient implements ClientHandler.IMEventListener {
                 try {
                     connect_status = STATU_CONNECTING;
                     onConnecting();
-                    f = bootstrap.connect(HOST, PORT).sync();
+                    f = bootstrap.connect(Constants.SOCKET_HOST, Constants.SOCKET_PORT).sync();
                     f.addListener(new ChannelFutureListener() {
                         @Override
                         public void operationComplete(ChannelFuture channelFuture) throws Exception {

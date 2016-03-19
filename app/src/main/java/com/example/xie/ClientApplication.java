@@ -21,7 +21,7 @@ import static android.os.Build.VERSION_CODES.GINGERBREAD;
  */
 public class ClientApplication extends Application {
 
-    private  String TAG = getClass().getSimpleName() ;
+    private String TAG = getClass().getSimpleName();
     private static Context instance;
 
     public User mUser;
@@ -36,22 +36,20 @@ public class ClientApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        // enabledStrictMode();
         mRefWatcher = LeakCanary.install(this);
         instance = this;
-
         init();
     }
 
     private void init() {
 
         AutoLayoutConifg.getInstance().useDeviceSize().init(this);
-
         mUser = new User();
         String uuid = UUID.randomUUID().toString();
-        uuid = uuid.replace("-","");
+        uuid = uuid.replace("-", "");
         Log.i(TAG, "uuid:" + uuid);
         mUser.setUid(uuid);
+
         IMClient.init(this);
         IMClient.instance().connect();
 
