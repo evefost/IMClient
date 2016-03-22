@@ -95,9 +95,7 @@ public class MessageHandler {
 
 
     private  Channel mChannel;
-    public void handSendMsg(final Channel channel, final Message.Data.Builder msg) {
-
-        mChannel = channel;
+    public void handSendMsg(final Message.Data.Builder msg) {
         //必须设置发送时间
         if(0==msg.getCreateTime()){
             msg.setCreateTime(System.currentTimeMillis());
@@ -110,8 +108,8 @@ public class MessageHandler {
 
                 if (IMClient.instance().isConnected()) {
                     try {
-                        Log.e(TAG, "发送中...time:" + msg.getCreateTime());
-                        ChannelFuture channelFuture = channel.writeAndFlush(msg);
+                        Log.e(TAG, "发送中...:" + msg);
+                        ChannelFuture channelFuture = mChannel.writeAndFlush(msg);
                         if(!isStopLoop && !looping ){
                             Log.i(TAG," start checkTimeOutMessage");
                             loopMessage();
@@ -139,19 +137,21 @@ public class MessageHandler {
     }
 
     /**连接成功*/
-    public void onConnected(){
+    public void onConnected(Channel channel){
+        this.mChannel = channel;
         //绑定设备
         String deviceid = ((ClientApplication)ClientApplication.instance()).getDeviceId();
 
         Message.Data.Builder data = Message.Data.newBuilder();
         data.setCmd(Cmd.BIND_DEVICE_VALUE);
         data.setContent(deviceid);
-        handSendMsg(mChannel,data);
+        data.setCreateTime(System.currentTimeMillis());
+        handSendMsg(data);
 
         ConcurrentHashMap<Long, Message.Data.Builder> mQueue = this.mQueue;
         Set<Map.Entry<Long, Message.Data.Builder>> entries =  mQueue.entrySet();
         for(Map.Entry<Long, Message.Data.Builder> entry:entries){
-            handSendMsg(mChannel,entry.getValue());
+            handSendMsg(entry.getValue());
         }
     }
 
