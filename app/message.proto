@@ -23,6 +23,7 @@ message Data {
 	CHAT_MSG_ECHO=5;
 	CHAT_OFFLINE_MSGS=6;
 	MINE_FRIENDS=7;
+	BIND_DEVICE=8;
 
 	}
 }

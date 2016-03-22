@@ -22,7 +22,7 @@ public class HeartBeatManager {
     private Context context = ClientApplication.instance();
 
 
-    private final int HEARTBEAT_INTERVAL = 10 * 1000;
+    private final int HEARTBEAT_INTERVAL = 30 * 1000;
     private final String ACTION_SENDING_HEARTBEAT = "com.custom.protocal.im.heart.break";
     private PendingIntent pendingIntent;
 

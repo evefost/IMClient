@@ -138,8 +138,16 @@ public class MessageHandler {
         });
     }
 
+    /**连接成功*/
     public void onConnected(){
-        //连接成功
+        //绑定设备
+        String deviceid = ((ClientApplication)ClientApplication.instance()).getDeviceId();
+
+        Message.Data.Builder data = Message.Data.newBuilder();
+        data.setCmd(Cmd.BIND_DEVICE_VALUE);
+        data.setContent(deviceid);
+        handSendMsg(mChannel,data);
+
         ConcurrentHashMap<Long, Message.Data.Builder> mQueue = this.mQueue;
         Set<Map.Entry<Long, Message.Data.Builder>> entries =  mQueue.entrySet();
         for(Map.Entry<Long, Message.Data.Builder> entry:entries){
@@ -148,7 +156,7 @@ public class MessageHandler {
     }
 
     private void proccessSendMessage(Message.Data.Builder data) {
-        Log.i(TAG, "处理发送消息=====>>=====>>cmd["+data.getCmd());
+        Log.i(TAG, "处理发送消息=====>>=====>>cmd[" + data.getCmd());
         switch (data.getCmd()) {
             case Cmd.LOGIN_VALUE:
                 Log.i(TAG, "登录 account[" + data.getSender());
@@ -158,6 +166,9 @@ public class MessageHandler {
                 break;
             case Cmd.CHAT_MSG_VALUE:
                 Log.i(TAG, "聊天消息    [" + data.getContent());
+                break;
+            case Cmd.BIND_DEVICE_VALUE:
+                Log.i(TAG, "绑定device  [" + data.getContent());
                 break;
         }
     }

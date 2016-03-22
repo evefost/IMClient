@@ -12,11 +12,44 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        buildConfigField "int", "serviceEnvironment", "0"   // 正式环境
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        product_test {
+            buildConfigField "int", "serviceEnvironment", "1"   // 测试环境
+        }
+        product_dev {
+            buildConfigField "int", "serviceEnvironment", "2"   // 开发环境
+        }
+        product_fac {
+        }
+        yinyongbao {
+            manifestPlaceholders = [CHANNEL_VALUE: "yingyongbao"]
+        }
+        xiaomi {
+            manifestPlaceholders = [CHANNEL_VALUE: "xiaomi"]
+        }
+        _360 {
+            manifestPlaceholders = [CHANNEL_VALUE: "360"]
+        }
+        wandoujia {
+            manifestPlaceholders = [CHANNEL_VALUE: "wandoujia"]
+        }
+        baidu {
+            manifestPlaceholders = [CHANNEL_VALUE: "baidu"]
+        }
+        google {
+            manifestPlaceholders = [CHANNEL_VALUE: "google"]
+        }
+        huawei {
+            manifestPlaceholders = [CHANNEL_VALUE: "huawei"]
         }
     }
 }

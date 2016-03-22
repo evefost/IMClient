@@ -3,6 +3,7 @@ package com.example.xie;
 import android.app.Application;
 import android.content.Context;
 import android.os.StrictMode;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.examp.bean.User;
@@ -54,6 +55,11 @@ public class ClientApplication extends Application {
         IMClient.instance().connect();
 
 
+    }
+
+    public String getDeviceId(){
+        TelephonyManager manager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        return manager.getDeviceId();
     }
 
     public User getmUser() {
