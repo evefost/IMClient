@@ -25,9 +25,9 @@ public class Constants {
     }
 
     public static String HOST =
-            isT() ? "http://192.168.1.2" : isD() ? "http://192.168.1.2" : "https://192.168.1.2";
+            isT() ? "http://192.168.60.91" : isD() ? "http://192.168.60.91" : "https://192.168.60.91";
     public static String SOCKET_HOST =
-            isT() ? "192.168.1.2" : isD() ? "192.168.1.2" : "192.168.1.2";
+            isT() ? "192.168.60.91" : isD() ? "192.168.60.91" : "192.168.60.91";
    public  static final int SOCKET_PORT = 53456;
 
 }

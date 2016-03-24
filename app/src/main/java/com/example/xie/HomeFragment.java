@@ -81,7 +81,7 @@ public class HomeFragment extends BaseFragment implements ClientHandler.IMEventL
             Message.Data.Builder accountInfo = Message.Data.newBuilder();
             accountInfo.setCmd(Message.Data.Cmd.LOGIN_VALUE);
             accountInfo.setSender(mApp.getUid());
-            IMClient.instance().sendMessage(accountInfo);
+            //IMClient.instance().sendMessage(accountInfo);
         }
 
     }

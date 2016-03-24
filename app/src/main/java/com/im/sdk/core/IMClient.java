@@ -172,7 +172,7 @@ public final class IMClient implements ClientHandler.IMEventListener {
     }
 
     public void sendMessage(final Message.Data.Builder msg) {
-        mMessageHandler.handSendMsg(channel, msg);
+        mMessageHandler.handSendMsg(msg);
     }
 
     public void disconnect() {
@@ -209,7 +209,7 @@ public final class IMClient implements ClientHandler.IMEventListener {
         connect_status = STATU_CONNECTED;
         Log.i(TAG, " onConnected ");
         notifyListener(false,null, EVENT_CONNECTED);
-        mMessageHandler.onConnected();
+        mMessageHandler.onConnected(channel);
     }
 
     @Override

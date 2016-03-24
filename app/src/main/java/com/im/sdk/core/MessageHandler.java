@@ -95,9 +95,7 @@ public class MessageHandler {
 
 
     private  Channel mChannel;
-    public void handSendMsg(final Channel channel, final Message.Data.Builder msg) {
-
-        mChannel = channel;
+    public void handSendMsg(final Message.Data.Builder msg) {
         //必须设置发送时间
         if(0==msg.getCreateTime()){
             msg.setCreateTime(System.currentTimeMillis());
@@ -110,8 +108,8 @@ public class MessageHandler {
 
                 if (IMClient.instance().isConnected()) {
                     try {
-                        Log.e(TAG, "发送中...time:" + msg.getCreateTime());
-                        ChannelFuture channelFuture = channel.writeAndFlush(msg);
+                        Log.e(TAG, "发送中...:" + msg);
+                        ChannelFuture channelFuture = mChannel.writeAndFlush(msg);
                         if(!isStopLoop && !looping ){
                             Log.i(TAG," start checkTimeOutMessage");
                             loopMessage();
@@ -138,17 +136,27 @@ public class MessageHandler {
         });
     }
 
-    public void onConnected(){
-        //连接成功
+    /**连接成功*/
+    public void onConnected(Channel channel){
+        this.mChannel = channel;
+        //绑定设备
+        String deviceid = ((ClientApplication)ClientApplication.instance()).getDeviceId();
+
+        Message.Data.Builder data = Message.Data.newBuilder();
+        data.setCmd(Cmd.BIND_DEVICE_VALUE);
+        data.setContent(deviceid);
+        data.setCreateTime(System.currentTimeMillis());
+        handSendMsg(data);
+
         ConcurrentHashMap<Long, Message.Data.Builder> mQueue = this.mQueue;
         Set<Map.Entry<Long, Message.Data.Builder>> entries =  mQueue.entrySet();
         for(Map.Entry<Long, Message.Data.Builder> entry:entries){
-            handSendMsg(mChannel,entry.getValue());
+            handSendMsg(entry.getValue());
         }
     }
 
     private void proccessSendMessage(Message.Data.Builder data) {
-        Log.i(TAG, "处理发送消息=====>>=====>>cmd["+data.getCmd());
+        Log.i(TAG, "处理发送消息=====>>=====>>cmd[" + data.getCmd());
         switch (data.getCmd()) {
             case Cmd.LOGIN_VALUE:
                 Log.i(TAG, "登录 account[" + data.getSender());
@@ -158,6 +166,9 @@ public class MessageHandler {
                 break;
             case Cmd.CHAT_MSG_VALUE:
                 Log.i(TAG, "聊天消息    [" + data.getContent());
+                break;
+            case Cmd.BIND_DEVICE_VALUE:
+                Log.i(TAG, "绑定device  [" + data.getContent());
                 break;
         }
     }
