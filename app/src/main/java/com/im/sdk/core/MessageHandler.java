@@ -182,11 +182,10 @@ public class MessageHandler {
                     Log.i(TAG, "服务端登录请求    msg[" + data.getContent() );
                     listener.onReceiveMessage(data);
                 } else {
-                    Log.i(TAG, "登录结果 LoginSuccess["+data.getLoginSuccess());
+                    Log.i(TAG, "登录结果 LoginSuccess["+data.getContent());
                     //移除发送消息
                     Message.Data.Builder pop = pop(data.getCreateTime());
                     if(pop != null){
-                        pop.setLoginSuccess(data.getLoginSuccess());
                         pop.setContent(data.getContent());
                         IMClient.instance().onSendSucceed(pop);
                     }

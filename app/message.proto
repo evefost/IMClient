@@ -7,12 +7,9 @@ message Data {
  required int32 cmd = 1;
  required int64 create_time = 2;
  optional string id = 3;
- optional string sender = 4;
- optional string content = 5;
- optional string ip = 6;
- optional int32 port = 7;
- optional bool login_success = 8;
- optional string receiver = 9;
+ optional string content = 4;
+ optional string sender = 5;
+ optional string receiver = 6;
   enum Cmd {
   
 	LOGIN=0;

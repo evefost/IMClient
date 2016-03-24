@@ -120,8 +120,8 @@ public class HomeFragment extends BaseFragment implements ClientHandler.IMEventL
     public void onSendSucceed(Message.Data.Builder msg) {
         Log.i(TAG, "onSendSucceed cmd [" + msg.getCmd());
         if (msg.getCmd() == Message.Data.Cmd.LOGIN_VALUE) {
-            Log.i(TAG, msg.getLoginSuccess() ? "登录成功" : "登录失败:" + msg.getContent());
-            if (msg.getLoginSuccess()) {
+            Log.i(TAG, "1".equals(msg.getContent()) ? "登录成功" : "登录失败:" + msg.getContent());
+            if ("1".equals(msg.getContent())) {
                 login_status.setText("已登录");
             }
         } else if (msg.getCmd() == Message.Data.Cmd.CHAT_MSG_ECHO_VALUE) {

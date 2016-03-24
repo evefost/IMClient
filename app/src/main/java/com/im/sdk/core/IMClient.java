@@ -159,7 +159,6 @@ public final class IMClient implements ClientHandler.IMEventListener {
                     Log.i(TAG, "connect EX" + e.toString());
                     connect_status = STATU_DISCONNECT;
                     onConnectFailure(e.toString());
-
                 } finally {
                     // Shut down the event loop to terminate all threads.
                     Log.i(TAG, " Shut down the event loop to terminate all threads.");

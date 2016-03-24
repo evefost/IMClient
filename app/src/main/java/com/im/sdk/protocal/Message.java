@@ -45,75 +45,43 @@ public final class Message {
         getIdBytes();
 
     /**
-     * <code>optional string sender = 4;</code>
-     */
-    boolean hasSender();
-    /**
-     * <code>optional string sender = 4;</code>
-     */
-    String getSender();
-    /**
-     * <code>optional string sender = 4;</code>
-     */
-    com.google.protobuf.ByteString
-        getSenderBytes();
-
-    /**
-     * <code>optional string content = 5;</code>
+     * <code>optional string content = 4;</code>
      */
     boolean hasContent();
     /**
-     * <code>optional string content = 5;</code>
+     * <code>optional string content = 4;</code>
      */
     String getContent();
     /**
-     * <code>optional string content = 5;</code>
+     * <code>optional string content = 4;</code>
      */
     com.google.protobuf.ByteString
         getContentBytes();
 
     /**
-     * <code>optional string ip = 6;</code>
+     * <code>optional string sender = 5;</code>
      */
-    boolean hasIp();
+    boolean hasSender();
     /**
-     * <code>optional string ip = 6;</code>
+     * <code>optional string sender = 5;</code>
      */
-    String getIp();
+    String getSender();
     /**
-     * <code>optional string ip = 6;</code>
+     * <code>optional string sender = 5;</code>
      */
     com.google.protobuf.ByteString
-        getIpBytes();
+        getSenderBytes();
 
     /**
-     * <code>optional int32 port = 7;</code>
-     */
-    boolean hasPort();
-    /**
-     * <code>optional int32 port = 7;</code>
-     */
-    int getPort();
-
-    /**
-     * <code>optional bool login_success = 8;</code>
-     */
-    boolean hasLoginSuccess();
-    /**
-     * <code>optional bool login_success = 8;</code>
-     */
-    boolean getLoginSuccess();
-
-    /**
-     * <code>optional string receiver = 9;</code>
+     * <code>optional string receiver = 6;</code>
      */
     boolean hasReceiver();
     /**
-     * <code>optional string receiver = 9;</code>
+     * <code>optional string receiver = 6;</code>
      */
     String getReceiver();
     /**
-     * <code>optional string receiver = 9;</code>
+     * <code>optional string receiver = 6;</code>
      */
     com.google.protobuf.ByteString
         getReceiverBytes();
@@ -133,11 +101,8 @@ public final class Message {
       cmd_ = 0;
       createTime_ = 0L;
       id_ = "";
-      sender_ = "";
       content_ = "";
-      ip_ = "";
-      port_ = 0;
-      loginSuccess_ = false;
+      sender_ = "";
       receiver_ = "";
     }
 
@@ -187,34 +152,18 @@ public final class Message {
             case 34: {
               com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000008;
-              sender_ = bs;
+              content_ = bs;
               break;
             }
             case 42: {
               com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000010;
-              content_ = bs;
+              sender_ = bs;
               break;
             }
             case 50: {
               com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000020;
-              ip_ = bs;
-              break;
-            }
-            case 56: {
-              bitField0_ |= 0x00000040;
-              port_ = input.readInt32();
-              break;
-            }
-            case 64: {
-              bitField0_ |= 0x00000080;
-              loginSuccess_ = input.readBool();
-              break;
-            }
-            case 74: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000100;
               receiver_ = bs;
               break;
             }
@@ -463,58 +412,16 @@ public final class Message {
       }
     }
 
-    public static final int SENDER_FIELD_NUMBER = 4;
-    private volatile Object sender_;
+    public static final int CONTENT_FIELD_NUMBER = 4;
+    private volatile Object content_;
     /**
-     * <code>optional string sender = 4;</code>
+     * <code>optional string content = 4;</code>
      */
-    public boolean hasSender() {
+    public boolean hasContent() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>optional string sender = 4;</code>
-     */
-    public String getSender() {
-      Object ref = sender_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          sender_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string sender = 4;</code>
-     */
-    public com.google.protobuf.ByteString
-        getSenderBytes() {
-      Object ref = sender_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        sender_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int CONTENT_FIELD_NUMBER = 5;
-    private volatile Object content_;
-    /**
-     * <code>optional string content = 5;</code>
-     */
-    public boolean hasContent() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <code>optional string content = 5;</code>
+     * <code>optional string content = 4;</code>
      */
     public String getContent() {
       Object ref = content_;
@@ -531,7 +438,7 @@ public final class Message {
       }
     }
     /**
-     * <code>optional string content = 5;</code>
+     * <code>optional string content = 4;</code>
      */
     public com.google.protobuf.ByteString
         getContentBytes() {
@@ -547,19 +454,19 @@ public final class Message {
       }
     }
 
-    public static final int IP_FIELD_NUMBER = 6;
-    private volatile Object ip_;
+    public static final int SENDER_FIELD_NUMBER = 5;
+    private volatile Object sender_;
     /**
-     * <code>optional string ip = 6;</code>
+     * <code>optional string sender = 5;</code>
      */
-    public boolean hasIp() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
+    public boolean hasSender() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>optional string ip = 6;</code>
+     * <code>optional string sender = 5;</code>
      */
-    public String getIp() {
-      Object ref = ip_;
+    public String getSender() {
+      Object ref = sender_;
       if (ref instanceof String) {
         return (String) ref;
       } else {
@@ -567,68 +474,38 @@ public final class Message {
             (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
-          ip_ = s;
+          sender_ = s;
         }
         return s;
       }
     }
     /**
-     * <code>optional string ip = 6;</code>
+     * <code>optional string sender = 5;</code>
      */
     public com.google.protobuf.ByteString
-        getIpBytes() {
-      Object ref = ip_;
+        getSenderBytes() {
+      Object ref = sender_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
-        ip_ = b;
+        sender_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
 
-    public static final int PORT_FIELD_NUMBER = 7;
-    private int port_;
-    /**
-     * <code>optional int32 port = 7;</code>
-     */
-    public boolean hasPort() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
-    }
-    /**
-     * <code>optional int32 port = 7;</code>
-     */
-    public int getPort() {
-      return port_;
-    }
-
-    public static final int LOGIN_SUCCESS_FIELD_NUMBER = 8;
-    private boolean loginSuccess_;
-    /**
-     * <code>optional bool login_success = 8;</code>
-     */
-    public boolean hasLoginSuccess() {
-      return ((bitField0_ & 0x00000080) == 0x00000080);
-    }
-    /**
-     * <code>optional bool login_success = 8;</code>
-     */
-    public boolean getLoginSuccess() {
-      return loginSuccess_;
-    }
-
-    public static final int RECEIVER_FIELD_NUMBER = 9;
+    public static final int RECEIVER_FIELD_NUMBER = 6;
     private volatile Object receiver_;
     /**
-     * <code>optional string receiver = 9;</code>
+     * <code>optional string receiver = 6;</code>
      */
     public boolean hasReceiver() {
-      return ((bitField0_ & 0x00000100) == 0x00000100);
+      return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
-     * <code>optional string receiver = 9;</code>
+     * <code>optional string receiver = 6;</code>
      */
     public String getReceiver() {
       Object ref = receiver_;
@@ -645,7 +522,7 @@ public final class Message {
       }
     }
     /**
-     * <code>optional string receiver = 9;</code>
+     * <code>optional string receiver = 6;</code>
      */
     public com.google.protobuf.ByteString
         getReceiverBytes() {
@@ -691,22 +568,13 @@ public final class Message {
         output.writeBytes(3, getIdBytes());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeBytes(4, getSenderBytes());
+        output.writeBytes(4, getContentBytes());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeBytes(5, getContentBytes());
+        output.writeBytes(5, getSenderBytes());
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeBytes(6, getIpBytes());
-      }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeInt32(7, port_);
-      }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        output.writeBool(8, loginSuccess_);
-      }
-      if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        output.writeBytes(9, getReceiverBytes());
+        output.writeBytes(6, getReceiverBytes());
       }
       unknownFields.writeTo(output);
     }
@@ -731,27 +599,15 @@ public final class Message {
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getSenderBytes());
+          .computeBytesSize(4, getContentBytes());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(5, getContentBytes());
+          .computeBytesSize(5, getSenderBytes());
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(6, getIpBytes());
-      }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(7, port_);
-      }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(8, loginSuccess_);
-      }
-      if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(9, getReceiverBytes());
+          .computeBytesSize(6, getReceiverBytes());
       }
       size += unknownFields.getSerializedSize();
       memoizedSerializedSize = size;
@@ -871,18 +727,12 @@ public final class Message {
         bitField0_ = (bitField0_ & ~0x00000002);
         id_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
-        sender_ = "";
-        bitField0_ = (bitField0_ & ~0x00000008);
         content_ = "";
+        bitField0_ = (bitField0_ & ~0x00000008);
+        sender_ = "";
         bitField0_ = (bitField0_ & ~0x00000010);
-        ip_ = "";
-        bitField0_ = (bitField0_ & ~0x00000020);
-        port_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000040);
-        loginSuccess_ = false;
-        bitField0_ = (bitField0_ & ~0x00000080);
         receiver_ = "";
-        bitField0_ = (bitField0_ & ~0x00000100);
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -922,25 +772,13 @@ public final class Message {
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.sender_ = sender_;
+        result.content_ = content_;
         if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
           to_bitField0_ |= 0x00000010;
         }
-        result.content_ = content_;
+        result.sender_ = sender_;
         if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
           to_bitField0_ |= 0x00000020;
-        }
-        result.ip_ = ip_;
-        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
-          to_bitField0_ |= 0x00000040;
-        }
-        result.port_ = port_;
-        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
-          to_bitField0_ |= 0x00000080;
-        }
-        result.loginSuccess_ = loginSuccess_;
-        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
-          to_bitField0_ |= 0x00000100;
         }
         result.receiver_ = receiver_;
         result.bitField0_ = to_bitField0_;
@@ -970,29 +808,18 @@ public final class Message {
           id_ = other.id_;
           onChanged();
         }
-        if (other.hasSender()) {
-          bitField0_ |= 0x00000008;
-          sender_ = other.sender_;
-          onChanged();
-        }
         if (other.hasContent()) {
-          bitField0_ |= 0x00000010;
+          bitField0_ |= 0x00000008;
           content_ = other.content_;
           onChanged();
         }
-        if (other.hasIp()) {
-          bitField0_ |= 0x00000020;
-          ip_ = other.ip_;
+        if (other.hasSender()) {
+          bitField0_ |= 0x00000010;
+          sender_ = other.sender_;
           onChanged();
         }
-        if (other.hasPort()) {
-          setPort(other.getPort());
-        }
-        if (other.hasLoginSuccess()) {
-          setLoginSuccess(other.getLoginSuccess());
-        }
         if (other.hasReceiver()) {
-          bitField0_ |= 0x00000100;
+          bitField0_ |= 0x00000020;
           receiver_ = other.receiver_;
           onChanged();
         }
@@ -1170,91 +997,15 @@ public final class Message {
         return this;
       }
 
-      private Object sender_ = "";
+      private Object content_ = "";
       /**
-       * <code>optional string sender = 4;</code>
+       * <code>optional string content = 4;</code>
        */
-      public boolean hasSender() {
+      public boolean hasContent() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>optional string sender = 4;</code>
-       */
-      public String getSender() {
-        Object ref = sender_;
-        if (!(ref instanceof String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            sender_ = s;
-          }
-          return s;
-        } else {
-          return (String) ref;
-        }
-      }
-      /**
-       * <code>optional string sender = 4;</code>
-       */
-      public com.google.protobuf.ByteString
-          getSenderBytes() {
-        Object ref = sender_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
-          sender_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string sender = 4;</code>
-       */
-      public Builder setSender(
-          String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
-        sender_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string sender = 4;</code>
-       */
-      public Builder clearSender() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        sender_ = getDefaultInstance().getSender();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string sender = 4;</code>
-       */
-      public Builder setSenderBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
-        sender_ = value;
-        onChanged();
-        return this;
-      }
-
-      private Object content_ = "";
-      /**
-       * <code>optional string content = 5;</code>
-       */
-      public boolean hasContent() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <code>optional string content = 5;</code>
+       * <code>optional string content = 4;</code>
        */
       public String getContent() {
         Object ref = content_;
@@ -1271,7 +1022,7 @@ public final class Message {
         }
       }
       /**
-       * <code>optional string content = 5;</code>
+       * <code>optional string content = 4;</code>
        */
       public com.google.protobuf.ByteString
           getContentBytes() {
@@ -1287,59 +1038,59 @@ public final class Message {
         }
       }
       /**
-       * <code>optional string content = 5;</code>
+       * <code>optional string content = 4;</code>
        */
       public Builder setContent(
           String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000010;
+  bitField0_ |= 0x00000008;
         content_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string content = 5;</code>
+       * <code>optional string content = 4;</code>
        */
       public Builder clearContent() {
-        bitField0_ = (bitField0_ & ~0x00000010);
+        bitField0_ = (bitField0_ & ~0x00000008);
         content_ = getDefaultInstance().getContent();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string content = 5;</code>
+       * <code>optional string content = 4;</code>
        */
       public Builder setContentBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000010;
+  bitField0_ |= 0x00000008;
         content_ = value;
         onChanged();
         return this;
       }
 
-      private Object ip_ = "";
+      private Object sender_ = "";
       /**
-       * <code>optional string ip = 6;</code>
+       * <code>optional string sender = 5;</code>
        */
-      public boolean hasIp() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
+      public boolean hasSender() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
-       * <code>optional string ip = 6;</code>
+       * <code>optional string sender = 5;</code>
        */
-      public String getIp() {
-        Object ref = ip_;
+      public String getSender() {
+        Object ref = sender_;
         if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           String s = bs.toStringUtf8();
           if (bs.isValidUtf8()) {
-            ip_ = s;
+            sender_ = s;
           }
           return s;
         } else {
@@ -1347,130 +1098,66 @@ public final class Message {
         }
       }
       /**
-       * <code>optional string ip = 6;</code>
+       * <code>optional string sender = 5;</code>
        */
       public com.google.protobuf.ByteString
-          getIpBytes() {
-        Object ref = ip_;
+          getSenderBytes() {
+        Object ref = sender_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (String) ref);
-          ip_ = b;
+          sender_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>optional string ip = 6;</code>
+       * <code>optional string sender = 5;</code>
        */
-      public Builder setIp(
+      public Builder setSender(
           String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000020;
-        ip_ = value;
+  bitField0_ |= 0x00000010;
+        sender_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string ip = 6;</code>
+       * <code>optional string sender = 5;</code>
        */
-      public Builder clearIp() {
-        bitField0_ = (bitField0_ & ~0x00000020);
-        ip_ = getDefaultInstance().getIp();
+      public Builder clearSender() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        sender_ = getDefaultInstance().getSender();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string ip = 6;</code>
+       * <code>optional string sender = 5;</code>
        */
-      public Builder setIpBytes(
+      public Builder setSenderBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000020;
-        ip_ = value;
-        onChanged();
-        return this;
-      }
-
-      private int port_ ;
-      /**
-       * <code>optional int32 port = 7;</code>
-       */
-      public boolean hasPort() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
-      }
-      /**
-       * <code>optional int32 port = 7;</code>
-       */
-      public int getPort() {
-        return port_;
-      }
-      /**
-       * <code>optional int32 port = 7;</code>
-       */
-      public Builder setPort(int value) {
-        bitField0_ |= 0x00000040;
-        port_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 port = 7;</code>
-       */
-      public Builder clearPort() {
-        bitField0_ = (bitField0_ & ~0x00000040);
-        port_ = 0;
-        onChanged();
-        return this;
-      }
-
-      private boolean loginSuccess_ ;
-      /**
-       * <code>optional bool login_success = 8;</code>
-       */
-      public boolean hasLoginSuccess() {
-        return ((bitField0_ & 0x00000080) == 0x00000080);
-      }
-      /**
-       * <code>optional bool login_success = 8;</code>
-       */
-      public boolean getLoginSuccess() {
-        return loginSuccess_;
-      }
-      /**
-       * <code>optional bool login_success = 8;</code>
-       */
-      public Builder setLoginSuccess(boolean value) {
-        bitField0_ |= 0x00000080;
-        loginSuccess_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional bool login_success = 8;</code>
-       */
-      public Builder clearLoginSuccess() {
-        bitField0_ = (bitField0_ & ~0x00000080);
-        loginSuccess_ = false;
+  bitField0_ |= 0x00000010;
+        sender_ = value;
         onChanged();
         return this;
       }
 
       private Object receiver_ = "";
       /**
-       * <code>optional string receiver = 9;</code>
+       * <code>optional string receiver = 6;</code>
        */
       public boolean hasReceiver() {
-        return ((bitField0_ & 0x00000100) == 0x00000100);
+        return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
-       * <code>optional string receiver = 9;</code>
+       * <code>optional string receiver = 6;</code>
        */
       public String getReceiver() {
         Object ref = receiver_;
@@ -1487,7 +1174,7 @@ public final class Message {
         }
       }
       /**
-       * <code>optional string receiver = 9;</code>
+       * <code>optional string receiver = 6;</code>
        */
       public com.google.protobuf.ByteString
           getReceiverBytes() {
@@ -1503,36 +1190,36 @@ public final class Message {
         }
       }
       /**
-       * <code>optional string receiver = 9;</code>
+       * <code>optional string receiver = 6;</code>
        */
       public Builder setReceiver(
           String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000100;
+  bitField0_ |= 0x00000020;
         receiver_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string receiver = 9;</code>
+       * <code>optional string receiver = 6;</code>
        */
       public Builder clearReceiver() {
-        bitField0_ = (bitField0_ & ~0x00000100);
+        bitField0_ = (bitField0_ & ~0x00000020);
         receiver_ = getDefaultInstance().getReceiver();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string receiver = 9;</code>
+       * <code>optional string receiver = 6;</code>
        */
       public Builder setReceiverBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000100;
+  bitField0_ |= 0x00000020;
         receiver_ = value;
         onChanged();
         return this;
@@ -1595,16 +1282,15 @@ public final class Message {
       descriptor;
   static {
     String[] descriptorData = {
-      "\n\rmessage.proto\022\023com.im.sdk.protocal\"\263\002\n" +
+      "\n\rmessage.proto\022\023com.im.sdk.protocal\"\202\002\n" +
       "\004Data\022\013\n\003cmd\030\001 \002(\005\022\023\n\013create_time\030\002 \002(\003\022" +
-      "\n\n\002id\030\003 \001(\t\022\016\n\006sender\030\004 \001(\t\022\017\n\007content\030\005" +
-      " \001(\t\022\n\n\002ip\030\006 \001(\t\022\014\n\004port\030\007 \001(\005\022\025\n\rlogin_" +
-      "success\030\010 \001(\010\022\020\n\010receiver\030\t \001(\t\"\230\001\n\003Cmd\022" +
-      "\t\n\005LOGIN\020\000\022\n\n\006LOGOUT\020\001\022\020\n\014OTHER_LOGGIN\020\002" +
-      "\022\r\n\tHEARTBEAT\020\003\022\014\n\010CHAT_MSG\020\004\022\021\n\rCHAT_MS" +
-      "G_ECHO\020\005\022\025\n\021CHAT_OFFLINE_MSGS\020\006\022\020\n\014MINE_" +
-      "FRIENDS\020\007\022\017\n\013BIND_DEVICE\020\010B\036\n\023com.im.sdk" +
-      ".protocalB\007Message"
+      "\n\n\002id\030\003 \001(\t\022\017\n\007content\030\004 \001(\t\022\016\n\006sender\030\005" +
+      " \001(\t\022\020\n\010receiver\030\006 \001(\t\"\230\001\n\003Cmd\022\t\n\005LOGIN\020" +
+      "\000\022\n\n\006LOGOUT\020\001\022\020\n\014OTHER_LOGGIN\020\002\022\r\n\tHEART" +
+      "BEAT\020\003\022\014\n\010CHAT_MSG\020\004\022\021\n\rCHAT_MSG_ECHO\020\005\022" +
+      "\025\n\021CHAT_OFFLINE_MSGS\020\006\022\020\n\014MINE_FRIENDS\020\007" +
+      "\022\017\n\013BIND_DEVICE\020\010B\036\n\023com.im.sdk.protocal" +
+      "B\007Message"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -1623,7 +1309,7 @@ public final class Message {
     internal_static_com_im_sdk_protocal_Data_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_com_im_sdk_protocal_Data_descriptor,
-        new String[] { "Cmd", "CreateTime", "Id", "Sender", "Content", "Ip", "Port", "LoginSuccess", "Receiver", });
+        new String[] { "Cmd", "CreateTime", "Id", "Content", "Sender", "Receiver", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
