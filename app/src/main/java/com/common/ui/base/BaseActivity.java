@@ -1,6 +1,5 @@
 package com.common.ui.base;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -32,7 +31,12 @@ public abstract class BaseActivity extends AutoLayoutActivity implements PageInt
     protected ClientApplication mApp;
     protected  Context mContext = null;
     protected Activity mActivity = null;
-
+    private LinearLayout mContentView;
+    private ViewGroup mHeaderView;
+    private View rl_left;
+    private View rl_right;
+    private TextView tv_title;
+    private SwipeBackActivityHelper mHelper;
 
     public static void lauchActivity(Activity startActivity,Class cls){
         lauchActivity(startActivity,cls,null);
@@ -47,12 +51,6 @@ public abstract class BaseActivity extends AutoLayoutActivity implements PageInt
         ActivityCompat.startActivity(startActivity, intent, options);
     }
 
-    private LinearLayout mContentView;
-    private ViewGroup mHeaderView;
-
-    private View rl_left;
-    private View rl_right;
-    private TextView tv_title;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +95,7 @@ public abstract class BaseActivity extends AutoLayoutActivity implements PageInt
     public void hideBack(boolean flag){
         rl_left.setVisibility(flag?View.GONE:View.VISIBLE);
     }
+
     @Override
     public void setListeners() {
       if(rl_left != null){
@@ -107,8 +106,8 @@ public abstract class BaseActivity extends AutoLayoutActivity implements PageInt
               }
           });
       }
-    }
 
+    }
 
     @Override
     public void setTitle(int resId){
@@ -121,8 +120,6 @@ public abstract class BaseActivity extends AutoLayoutActivity implements PageInt
             tv_title.setText(title==null?"":title);
         }
     }
-
-    private SwipeBackActivityHelper mHelper;
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {

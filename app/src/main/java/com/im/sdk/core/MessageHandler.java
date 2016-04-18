@@ -5,18 +5,16 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 
-
 import com.example.xie.ClientApplication;
 import com.im.sdk.protocal.Message;
-import  com.im.sdk.protocal.Message.Data.Cmd;
-import java.util.HashMap;
+import com.im.sdk.protocal.Message.Data.Cmd;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
 
 
 /**
@@ -25,16 +23,17 @@ import io.netty.channel.ChannelFuture;
  */
 public class MessageHandler {
 
-    public String TAG = getClass().getSimpleName();
-
-    ConcurrentHashMap<Long, Message.Data.Builder> mQueue = new ConcurrentHashMap<Long, Message.Data.Builder>();
     public static long timeOut = 30 * 1000;
     private static MessageHandler instance = new MessageHandler();
+    public String TAG = getClass().getSimpleName();
+    ConcurrentHashMap<Long, Message.Data.Builder> mQueue = new ConcurrentHashMap<>();
     private Context context = ClientApplication.instance();
-    private ExecutorService mExecutor;
     private Handler timerHandler = new Handler();
+    private ExecutorService mExecutor;
+    private Channel mChannel;
     private boolean looping = false;
     private boolean isStopLoop = false;
+
     private MessageHandler() {
     }
 
@@ -42,14 +41,14 @@ public class MessageHandler {
         return instance;
     }
 
-    public void setExcutor(ExecutorService executor){
+    public void setExcutor(ExecutorService executor) {
         this.mExecutor = executor;
     }
 
     private void loopMessage() {
-        Log.i(TAG,"loopMessage mQueue size["+mQueue.size());
-        if (isStopLoop ||mQueue.size()==0 ) {
-            Log.i(TAG,"stopLoop.......");
+        Log.i(TAG, "loopMessage mQueue size[" + mQueue.size());
+        if (isStopLoop || mQueue.size() == 0) {
+            Log.i(TAG, "stopLoop.......");
             looping = false;
             return;
         }
@@ -64,14 +63,14 @@ public class MessageHandler {
     }
 
     private void checkTimeOutMessage() {
-        Log.i(TAG,"checkTimeOutMessage size[ "+mQueue.size()+" ]");
+        Log.i(TAG, "checkTimeOutMessage size[ " + mQueue.size() + " ]");
         long currentTime = System.currentTimeMillis();
         for (Map.Entry<Long, Message.Data.Builder> entry : mQueue.entrySet()) {
             Long timeStrart = entry.getKey();
             long time = currentTime - timeStrart;
             if (time >= timeOut) {
                 IMClient.instance().onSendFailure(entry.getValue());
-                Log.e(TAG,"消息发送超时 ["+entry.getKey());
+                Log.e(TAG, "messaage send timeout [" + entry.getKey());
                 pop(entry.getKey());
             }
         }
@@ -94,28 +93,25 @@ public class MessageHandler {
     }
 
 
-    private  Channel mChannel;
     public void handSendMsg(final Message.Data.Builder msg) {
         //必须设置发送时间
-        if(0==msg.getCreateTime()){
+        if (0 == msg.getCreateTime()) {
             msg.setCreateTime(System.currentTimeMillis());
         }
         proccessSendMessage(msg);
-        push(msg);
         mExecutor.execute(new Runnable() {
             @Override
             public void run() {
-
                 if (IMClient.instance().isConnected()) {
                     try {
-                        Log.e(TAG, "发送中...:" + msg);
-                        ChannelFuture channelFuture = mChannel.writeAndFlush(msg);
-                        if(!isStopLoop && !looping ){
-                            Log.i(TAG," start checkTimeOutMessage");
+                        Log.e(TAG, "message sending ...:" + msg);
+                        mChannel.writeAndFlush(msg);
+                        if (!isStopLoop && !looping) {
+                            Log.i(TAG, "start to checkTimeOut Messages");
                             loopMessage();
                         }
                     } catch (Exception e) {
-                        Log.e(TAG, "发送失败:" + e.toString());
+                        Log.e(TAG, "message send failue :" + e.toString());
                         pop(msg.getCreateTime());
                         if (msg.getCmd() != Cmd.HEARTBEAT_VALUE) {
                             //心跳消息不用通知
@@ -123,7 +119,7 @@ public class MessageHandler {
                         }
                     }
                 } else {
-                    Log.i(TAG, "服务器已经断开,重连");
+                    Log.i(TAG, "message sever is disconnect ,reconnect");
                     boolean stopReconnect = IMClient.instance().reconnect();
                     if (stopReconnect) {
                         if (msg.getCmd() != Cmd.HEARTBEAT_VALUE) {
@@ -136,63 +132,66 @@ public class MessageHandler {
         });
     }
 
-    /**连接成功*/
-    public void onConnected(Channel channel){
+    /**
+     * 连接成功
+     */
+    public void onConnected(Channel channel) {
         this.mChannel = channel;
         //绑定设备
-        String deviceid = ((ClientApplication)ClientApplication.instance()).getDeviceId();
-
+        String deviceid = ((ClientApplication) ClientApplication.instance()).getDeviceId();
         Message.Data.Builder data = Message.Data.newBuilder();
         data.setCmd(Cmd.BIND_DEVICE_VALUE);
         data.setContent(deviceid);
         data.setCreateTime(System.currentTimeMillis());
         handSendMsg(data);
-
         ConcurrentHashMap<Long, Message.Data.Builder> mQueue = this.mQueue;
-        Set<Map.Entry<Long, Message.Data.Builder>> entries =  mQueue.entrySet();
-        for(Map.Entry<Long, Message.Data.Builder> entry:entries){
+        Set<Map.Entry<Long, Message.Data.Builder>> entries = mQueue.entrySet();
+        for (Map.Entry<Long, Message.Data.Builder> entry : entries) {
             handSendMsg(entry.getValue());
         }
     }
 
     private void proccessSendMessage(Message.Data.Builder data) {
-        Log.i(TAG, "处理发送消息=====>>=====>>cmd[" + data.getCmd());
+        Log.i(TAG, "proccess Send Message=====>>=====>>cmd[" + data.getCmd());
+        push(data);
         switch (data.getCmd()) {
             case Cmd.LOGIN_VALUE:
-                Log.i(TAG, "登录 account[" + data.getSender());
+                Log.i(TAG, "is login message account[" + data.getSender());
                 break;
             case Cmd.HEARTBEAT_VALUE:
-                Log.i(TAG,"心跳消息 time[" + data.getCreateTime());
+                Log.i(TAG, "is hearbreak mesage  time[" + data.getCreateTime());
                 break;
             case Cmd.CHAT_MSG_VALUE:
-                Log.i(TAG, "聊天消息    [" + data.getContent());
+                Log.i(TAG, "is nomal chat message   [" + data.getContent());
                 break;
             case Cmd.BIND_DEVICE_VALUE:
-                Log.i(TAG, "绑定device  [" + data.getContent());
+                Log.i(TAG, "is bind device message [" + data.getContent());
                 break;
         }
     }
 
-    /**所有消息的接收在这处理*/
-    public void handReceiveMsg(Message.Data data, ClientHandler.IMEventListener listener) {
-        Log.i(TAG, "处理收到消息<<======<<======cmd["+data.getCmd());
+    /**
+     * 所有消息的接收在这处理
+     */
+    public void proccessReceiveMsg(Message.Data data, ClientHandler.IMEventListener listener) {
+        Log.i(TAG, "处理收到消息<<======<<======cmd[" + data.getCmd());
         switch (data.getCmd()) {
             case Cmd.LOGIN_VALUE:
                 if (TextUtils.isEmpty(data.getSender())) {
-                    Log.i(TAG, "服务端登录请求    msg[" + data.getContent() );
+                    Log.i(TAG, "服务端登录请求    msg[" + data.getContent());
                     listener.onReceiveMessage(data);
                 } else {
-                    Log.i(TAG, "登录结果 LoginSuccess["+data.getContent());
+                    Log.i(TAG, "登录结果 LoginSuccess[" + data.getContent());
                     //移除发送消息
                     Message.Data.Builder pop = pop(data.getCreateTime());
-                    if(pop != null){
+                    if (pop != null) {
                         pop.setContent(data.getContent());
                         IMClient.instance().onSendSucceed(pop);
                     }
                 }
                 break;
             case Cmd.OTHER_LOGGIN_VALUE:
-                Log.i(TAG, "帐号别处登录     account["+data.getSender());
+                Log.i(TAG, "帐号别处登录     account[" + data.getSender());
                 listener.onReceiveMessage(data);
                 break;
             case Cmd.HEARTBEAT_VALUE:
@@ -205,9 +204,9 @@ public class MessageHandler {
                 listener.onReceiveMessage(data);
                 break;
             case Message.Data.Cmd.CHAT_MSG_ECHO_VALUE:
-                Log.i(TAG, "消息回应,发送成功   time["+data.getCreateTime());
+                Log.i(TAG, "消息回应,发送成功   time[" + data.getCreateTime());
                 Message.Data.Builder pop = pop(data.getCreateTime());
-                if(pop != null){
+                if (pop != null) {
                     Log.i(TAG, "createTime:" + data.getCreateTime() + "==pop:" + pop.getContent());
                     pop.setCmd(Cmd.CHAT_MSG_ECHO_VALUE);
                     //移除发送消息
@@ -215,7 +214,7 @@ public class MessageHandler {
                 }
                 break;
             case Cmd.MINE_FRIENDS_VALUE:
-                Log.i(TAG, "消息回应,好友列表"+data.getContent());
+                Log.i(TAG, "消息回应,好友列表" + data.getContent());
                 Message.Data.Builder pop2 = pop(data.getCreateTime());
                 listener.onReceiveMessage(data);
                 break;

@@ -2,7 +2,6 @@ package com.example.xie;
 
 import android.app.Application;
 import android.content.Context;
-import android.os.StrictMode;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -14,20 +13,14 @@ import com.zhy.autolayout.config.AutoLayoutConifg;
 
 import java.util.UUID;
 
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.GINGERBREAD;
-
 /**
  * Created by xie on 2016/1/31.
  */
 public class ClientApplication extends Application {
 
-    private String TAG = getClass().getSimpleName();
     private static Context instance;
-
     public User mUser;
-
-
+    private String TAG = getClass().getSimpleName();
     private RefWatcher mRefWatcher;
 
     public static Context instance() {
@@ -85,4 +78,5 @@ public class ClientApplication extends Application {
             return false;
         }
     }
+
 }
