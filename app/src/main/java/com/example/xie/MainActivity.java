@@ -26,6 +26,7 @@ public class MainActivity extends BaseActivity {
     private Button btn_users;
     @Override
     public void findViews() {
+
         view_pager = (ViewPager) findViewById(R.id.view_pager);
         btn_home = (Button) findViewById(R.id.btn_home);
         btn_users = (Button) findViewById(R.id.btn_users);

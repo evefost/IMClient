@@ -14,7 +14,7 @@ import com.zhy.autolayout.config.AutoLayoutConifg;
 import java.util.UUID;
 
 /**
- * Created by xie on 2016/1/31.
+ * 2016/1/31.
  */
 public class ClientApplication extends Application {
 
