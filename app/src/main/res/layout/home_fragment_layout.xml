@@ -64,7 +64,6 @@
                 android:layout_alignParentTop="true"
                 android:layout_weight="5"
                 android:maxLines="1"
-                android:singleLine="true"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 

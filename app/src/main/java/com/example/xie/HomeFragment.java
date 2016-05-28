@@ -26,8 +26,6 @@ public class HomeFragment extends BaseFragment implements ClientHandler.IMEventL
 
     public String TAG = getClass().getSimpleName();
 
-
-
     private TextView tv_status;
     private Button btn_connect;
     private Button btn_disconnect;
