@@ -7,13 +7,9 @@ import android.os.Bundle;
  */
 public interface PageInterface {
 
-
-
-
     public int getLayoutId();
 
     public void findViews();
-
 
     public void init(Bundle savedInstanceState);
 
@@ -22,6 +18,7 @@ public interface PageInterface {
     public void hideTopBar(boolean flag);
 
     public void hideBack(boolean flag);
+
     public void setTitle(int resId);
 
     public void setTitle(String title);

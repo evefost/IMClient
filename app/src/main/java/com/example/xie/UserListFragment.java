@@ -14,6 +14,7 @@ import com.example.xie.imclient.R;
 import com.im.sdk.core.ClientHandler;
 import com.im.sdk.core.IMClient;
 import com.im.sdk.protocal.Message;
+import com.im.ui.ChatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +43,8 @@ public class UserListFragment extends BaseFragment implements ClientHandler.IMEv
 
     @Override
     public void init(Bundle savedInstanceState) {
-        hideTopBar(true);
-        setTitle("当前在线用户");
+
+        setTitle("联系人");
         IMClient.addEventListener(this);
         mAdapter = new RcAdater();
         rcView.setLayoutManager(new LinearLayoutManager(mActivity));

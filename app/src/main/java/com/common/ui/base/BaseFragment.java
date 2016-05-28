@@ -83,6 +83,10 @@ public abstract class BaseFragment extends Fragment implements PageInterface {
     }
 
     @Override
+    public void findViews() {
+
+    }
+    @Override
     public void setListeners() {
     }
     @Override
@@ -100,6 +104,9 @@ public abstract class BaseFragment extends Fragment implements PageInterface {
 
     @Override
     public void setTitle(String title){
+        if(tv_title != null ){
+            tv_title.setText(title);
+        }
 
     }
 

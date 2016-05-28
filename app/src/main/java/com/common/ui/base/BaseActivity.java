@@ -18,6 +18,7 @@ import com.zhy.autolayou.AutoLayoutActivity;
 
 import java.io.Serializable;
 
+import butterknife.ButterKnife;
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.Utils;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivityBase;
@@ -73,8 +74,8 @@ public abstract class BaseActivity extends AutoLayoutActivity implements PageInt
         mContentView.addView(mHeaderView);
 
         mContentView.addView(getLayoutInflater().inflate(getLayoutId(), null));
-
         setContentView(mContentView);
+        ButterKnife.inject(this);
         initHeaderView();
 
         findViews();
@@ -82,6 +83,10 @@ public abstract class BaseActivity extends AutoLayoutActivity implements PageInt
         setListeners();
     }
 
+    @Override
+    public void findViews() {
+
+    }
     private void initHeaderView(){
         rl_left = mHeaderView.findViewById(R.id.rl_left);
         tv_title = (TextView) mHeaderView.findViewById(R.id.tv_title);

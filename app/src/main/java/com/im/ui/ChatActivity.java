@@ -1,4 +1,4 @@
-package com.example.xie;
+package com.im.ui;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -56,7 +56,7 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
         tv_send = (TextView) findViewById(R.id.tv_send);
     }
 
-    private RcAdater mAdapter;
+    private ChatAdapterForRv mAdapter;
     List<LocalMessage> messageList = new ArrayList<LocalMessage>();
 
     private String receiverId;
@@ -70,7 +70,7 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
         tv_connect_state.setVisibility(IMClient.instance().isConnected() ? View.GONE : View.VISIBLE);
 
 
-        mAdapter = new RcAdater();
+        mAdapter = new ChatAdapterForRv(mContext,messageList);
         rcView.setLayoutManager(new LinearLayoutManager(mActivity));
         rcView.setAdapter(mAdapter);
         loadLocalMessages();
@@ -173,53 +173,6 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
         tv_connect_state.setVisibility(View.VISIBLE);
     }
 
-    private class RcAdater extends RecyclerView.Adapter {
 
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            switch (viewType) {
-                case 0:
-                    return new ViewHolder(View.inflate(mActivity, R.layout.chat_item_left, null));
-                case 1:
-                    return new ViewHolder(View.inflate(mActivity, R.layout.chat_item_right, null));
-                default:
-                    return new ViewHolder(View.inflate(mActivity, R.layout.chat_item_right, null));
-            }
-
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            LocalMessage localMessage = messageList.get(position);
-            Message.Data data = localMessage.getData();
-            ViewHolder vholder = (ViewHolder) holder;
-            vholder.tv_message.setText(data.getContent());
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            LocalMessage localMessage = messageList.get(position);
-            Message.Data data = localMessage.getData();
-            if (data.getSender().equals(mApp.getUid())) {
-                return 0;
-            } else {
-                return 1;
-            }
-        }
-
-        @Override
-        public int getItemCount() {
-            return messageList.size();
-        }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-            TextView tv_message;
-
-            public ViewHolder(View itemView) {
-                super(itemView);
-                tv_message = (TextView) itemView.findViewById(R.id.tv_message);
-            }
-        }
-    }
 
 }

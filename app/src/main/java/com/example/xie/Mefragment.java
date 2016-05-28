@@ -17,7 +17,7 @@ import com.im.sdk.protocal.Message;
 /**
  * Created by xie on 2016/2/25.
  */
-public class HomeFragment extends BaseFragment implements ClientHandler.IMEventListener, View.OnClickListener {
+public class Mefragment extends BaseFragment implements ClientHandler.IMEventListener, View.OnClickListener {
 
     @Override
     public int getLayoutId() {
@@ -49,7 +49,7 @@ public class HomeFragment extends BaseFragment implements ClientHandler.IMEventL
 
     @Override
     public void init(Bundle savedInstanceState) {
-        setTitle("聊天");
+        setTitle("我");
         account.setText(mApp.getUid());
         IMClient.addEventListener(this);
         tv_status.setText(IMClient.instance().isConnected() ? "server is contected" : "server is disconnected");
