@@ -1,8 +1,7 @@
-package com.example.xie;
+package com.im.ui;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import com.xy.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +12,7 @@ import com.example.xie.imclient.R;
 import com.im.sdk.core.ClientHandler;
 import com.im.sdk.core.IMClient;
 import com.im.sdk.protocal.Message;
+import com.xy.util.Log;
 
 public class Mefragment extends BaseFragment implements ClientHandler.IMEventListener, View.OnClickListener {
 
@@ -47,7 +47,7 @@ public class Mefragment extends BaseFragment implements ClientHandler.IMEventLis
         setTitle("我");
         enableBack(false);
         account.setText(mApp.getUid());
-        IMClient.addEventListener(this);
+        IMClient.registIMEventListener(this);
         tv_status.setText(IMClient.instance().isConnected() ? "server is contected" : "server is disconnected");
 
     }
@@ -134,7 +134,7 @@ public class Mefragment extends BaseFragment implements ClientHandler.IMEventLis
     @Override
     public void onDestroy() {
         super.onDestroy();
-        IMClient.removeEventListener(this);
+        IMClient.unRegistIMEventListener(this);
     }
 
 

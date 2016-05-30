@@ -5,9 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import com.xy.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -27,8 +26,6 @@ import java.util.Random;
  */
 public class ChatActivity extends BaseActivity implements ClientHandler.IMEventListener {
 
-
-    private  String TAG = getClass().getSimpleName();
 
     public static void lauchActivity(Activity activity, String uid) {
         Intent intent = new Intent(activity.getApplicationContext(), ChatActivity.class);
@@ -56,21 +53,21 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
         tv_send = (TextView) findViewById(R.id.tv_send);
     }
 
-    private ChatAdapterForRv mAdapter;
+    private ChatAdapter mAdapter;
     List<LocalMessage> messageList = new ArrayList<LocalMessage>();
 
     private String receiverId;
 
     @Override
     public void init(Bundle savedInstanceState) {
-        IMClient.instance().addEventListener(this);
+        IMClient.instance().registIMEventListener(this);
         receiverId = getIntent().getStringExtra("uid")==null?"":getIntent().getStringExtra("uid");
         setTitle("与" + receiverId);
         tv_connect_state.setText(IMClient.instance().isConnecting()?"连接中...":"服务器已断开..");
         tv_connect_state.setVisibility(IMClient.instance().isConnected() ? View.GONE : View.VISIBLE);
 
 
-        mAdapter = new ChatAdapterForRv(mContext,messageList);
+        mAdapter = new ChatAdapter(mContext,messageList);
         rcView.setLayoutManager(new LinearLayoutManager(mActivity));
         rcView.setAdapter(mAdapter);
         loadLocalMessages();
@@ -81,7 +78,7 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
     @Override
     public void  onDestroy(){
         super.onDestroy();
-        IMClient.instance().removeEventListener(this);
+        IMClient.instance().unRegistIMEventListener(this);
     }
     @Override
     public void setListeners() {
@@ -162,13 +159,13 @@ public class ChatActivity extends BaseActivity implements ClientHandler.IMEventL
 
     @Override
     public void onDisconnected(boolean isException) {
-        Log.i(TAG, "onDisconnected");
+        Log.i("onDisconnected");
         tv_connect_state.setText("服务器已断开..");
         tv_connect_state.setVisibility(View.VISIBLE);
     }
     @Override
     public void onConnecting() {
-        Log.i(TAG, "onConnecting");
+        Log.i("onConnecting");
         tv_connect_state.setText("连接中..");
         tv_connect_state.setVisibility(View.VISIBLE);
     }

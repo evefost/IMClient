@@ -10,9 +10,9 @@ import com.zhy.base.adapter.recyclerview.MultiItemTypeSupport;
 
 import java.util.List;
 
-public class ChatAdapterForRv extends MultiItemCommonAdapter<LocalMessage> {
+public class ChatAdapter extends MultiItemCommonAdapter<LocalMessage> {
 
-    public ChatAdapterForRv(Context context, List<LocalMessage> datas) {
+    public ChatAdapter(Context context, List<LocalMessage> datas) {
         super(context, datas, new MultiItemTypeSupport<LocalMessage>() {
             @Override
             public int getLayoutId(int itemType) {

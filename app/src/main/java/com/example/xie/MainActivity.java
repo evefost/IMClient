@@ -8,6 +8,9 @@ import android.widget.TextView;
 import com.common.ui.base.BaseActivity;
 import com.common.ui.base.FragmentTabManager;
 import com.example.xie.imclient.R;
+import com.im.ui.ContactFragment;
+import com.im.ui.Mefragment;
+import com.im.ui.RecentFragment;
 
 import butterknife.InjectView;
 import butterknife.OnClick;

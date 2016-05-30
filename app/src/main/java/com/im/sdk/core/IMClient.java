@@ -81,11 +81,11 @@ public final class IMClient implements ClientHandler.IMEventListener {
         return mInstance;
     }
 
-    public static void addEventListener(ClientHandler.IMEventListener listener) {
+    public static void registIMEventListener(ClientHandler.IMEventListener listener) {
         mIMEventListener.add(listener);
     }
 
-    public static void removeEventListener(ClientHandler.IMEventListener listener) {
+    public static void unRegistIMEventListener(ClientHandler.IMEventListener listener) {
         mIMEventListener.remove(listener);
     }
 

@@ -1,4 +1,4 @@
-package com.example.xie;
+package com.im.ui;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,7 +14,6 @@ import com.example.xie.imclient.R;
 import com.im.sdk.core.ClientHandler;
 import com.im.sdk.core.IMClient;
 import com.im.sdk.protocal.Message;
-import com.im.ui.ChatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +45,7 @@ public class ContactFragment extends BaseFragment implements ClientHandler.IMEve
 
         setTitle("联系人");
         enableBack(false);
-        IMClient.addEventListener(this);
+        IMClient.registIMEventListener(this);
         mAdapter = new RcAdater();
         rcView.setLayoutManager(new LinearLayoutManager(mActivity));
         rcView.setAdapter(mAdapter);
