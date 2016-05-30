@@ -31,4 +31,11 @@
     <color name="androidColorC">#99CC00</color>
     <color name="androidColorD">#FFBB33</color>
     <color name="androidColorE">#FF4444</color>
+
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <drawable name="glay">#DDDDFF</drawable>
+    <drawable name="white">#ffffff</drawable>
 </resources>

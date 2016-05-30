@@ -3,6 +3,8 @@ package com.im.ui;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.common.ui.base.BaseFragment;
 import com.examp.bean.LocalMessage;
@@ -10,6 +12,7 @@ import com.example.xie.imclient.R;
 import com.im.sdk.core.ClientHandler;
 import com.im.sdk.core.IMClient;
 import com.im.sdk.protocal.Message;
+import com.zhy.base.adapter.recyclerview.OnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +48,23 @@ public class RecentFragment extends BaseFragment implements ClientHandler.IMEven
         mRcView.setAdapter(mAdapter);
         loadLocalMessages();
         mAdapter.notifyDataSetChanged();
+    }
+
+
+    @Override
+    public void setListeners() {
+        super.setListeners();
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(ViewGroup parent, View view, Object o, int position) {
+                ChatActivity.lauchActivity(mActivity, messageList.get(position).getData().getSender());
+            }
+
+            @Override
+            public boolean onItemLongClick(ViewGroup parent, View view, Object o, int position) {
+                return false;
+            }
+        });
     }
 
     private void loadLocalMessages() {
