@@ -19,15 +19,11 @@ import com.zhy.autolayou.AutoLayoutActivity;
 import java.io.Serializable;
 
 import butterknife.ButterKnife;
-import me.imid.swipebacklayout.lib.SwipeBackLayout;
-import me.imid.swipebacklayout.lib.Utils;
-import me.imid.swipebacklayout.lib.app.SwipeBackActivityBase;
-import me.imid.swipebacklayout.lib.app.SwipeBackActivityHelper;
 
 /**
  * Created by xie on 2016/2/1.
  */
-public abstract class BaseActivity extends AutoLayoutActivity implements PageInterface,SwipeBackActivityBase {
+public abstract class BaseActivity extends AutoLayoutActivity implements PageInterface{
 
     protected ClientApplication mApp;
     protected  Context mContext = null;
@@ -37,7 +33,6 @@ public abstract class BaseActivity extends AutoLayoutActivity implements PageInt
     private View rl_left;
     private View rl_right;
     private TextView tv_title;
-    private SwipeBackActivityHelper mHelper;
 
     public static void lauchActivity(Activity startActivity,Class cls){
         lauchActivity(startActivity,cls,null);
@@ -59,8 +54,6 @@ public abstract class BaseActivity extends AutoLayoutActivity implements PageInt
         mContext = getApplicationContext();
         this.mActivity = this;
 
-        mHelper = new SwipeBackActivityHelper(this);
-        mHelper.onActivityCreate();
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         mContentView = new LinearLayout(this);
@@ -125,38 +118,6 @@ public abstract class BaseActivity extends AutoLayoutActivity implements PageInt
             tv_title.setText(title==null?"":title);
         }
     }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mHelper.onPostCreate();
-    }
-
-    @Override
-    public View findViewById(int id) {
-        View v = super.findViewById(id);
-        if (v == null && mHelper != null)
-            return mHelper.findViewById(id);
-        return v;
-    }
-
-    @Override
-    public SwipeBackLayout getSwipeBackLayout() {
-        return mHelper.getSwipeBackLayout();
-    }
-
-    @Override
-    public void setSwipeBackEnable(boolean enable) {
-        getSwipeBackLayout().setEnableGesture(enable);
-    }
-
-    @Override
-    public void scrollToFinishActivity() {
-        Utils.convertActivityToTranslucent(this);
-        getSwipeBackLayout().scrollToFinishActivity();
-    }
-
-
 
     @Override
     public void finish(){

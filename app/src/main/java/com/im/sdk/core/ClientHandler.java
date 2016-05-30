@@ -15,7 +15,7 @@
  */
 package com.im.sdk.core;
 
-import android.util.Log;
+import com.xy.util.Log;
 
 import com.im.sdk.protocal.Message;
 
@@ -27,7 +27,6 @@ import io.netty.channel.ChannelHandlerContext;
 @ChannelHandler.Sharable
 public class ClientHandler extends ChannelHandlerAdapter {
 
-    public static String TAG = "EchoClientHandler";
 
     public ClientHandler(IMHandlerListener listener) {
         this.mListener = listener;
@@ -38,7 +37,7 @@ public class ClientHandler extends ChannelHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
 
-        Log.i(TAG, "channelActive 已连上服务器"+ctx.channel().isActive());
+        Log.i("channelActive 已连上服务器"+ctx.channel().isActive());
         if (mListener != null) {
             mListener.onConnected();
         }
@@ -47,7 +46,7 @@ public class ClientHandler extends ChannelHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        Log.i(TAG, "channelRead 收到消息");
+        Log.i("channelRead 收到消息");
         if (mListener != null) {
             mListener.onReceiveMessage((Message.Data) msg);
         }

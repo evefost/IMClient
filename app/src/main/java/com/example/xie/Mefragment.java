@@ -2,7 +2,7 @@ package com.example.xie;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
+import com.xy.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,17 +14,12 @@ import com.im.sdk.core.ClientHandler;
 import com.im.sdk.core.IMClient;
 import com.im.sdk.protocal.Message;
 
-/**
- * Created by xie on 2016/2/25.
- */
 public class Mefragment extends BaseFragment implements ClientHandler.IMEventListener, View.OnClickListener {
 
     @Override
     public int getLayoutId() {
-        return R.layout.home_fragment_layout;
+        return R.layout.me_fragment_layout;
     }
-
-    public String TAG = getClass().getSimpleName();
 
     private TextView tv_status;
     private Button btn_connect;
@@ -50,6 +45,7 @@ public class Mefragment extends BaseFragment implements ClientHandler.IMEventLis
     @Override
     public void init(Bundle savedInstanceState) {
         setTitle("我");
+        enableBack(false);
         account.setText(mApp.getUid());
         IMClient.addEventListener(this);
         tv_status.setText(IMClient.instance().isConnected() ? "server is contected" : "server is disconnected");
@@ -70,10 +66,10 @@ public class Mefragment extends BaseFragment implements ClientHandler.IMEventLis
     @Override
     public void onReceiveMessage(Message.Data msg) {
 
-        Log.i(TAG, "data cmd[" + msg.getCmd() + "]id[" + msg.getId() + "]username[" + msg.getContent());
+        Log.i( "data cmd[" + msg.getCmd() + "]id[" + msg.getId() + "]username[" + msg.getContent());
         if (msg.getCmd() == Message.Data.Cmd.LOGIN_VALUE && TextUtils.isEmpty(msg.getSender())) {
             //未登录，登录
-            Log.i(TAG, "未登录，登录");
+            Log.i( "未登录，登录");
             login_status.setText("未登录");
             Message.Data.Builder accountInfo = Message.Data.newBuilder();
             accountInfo.setCmd(Message.Data.Cmd.LOGIN_VALUE);
@@ -85,13 +81,13 @@ public class Mefragment extends BaseFragment implements ClientHandler.IMEventLis
 
     @Override
     public void onConnecting() {
-        Log.i(TAG, "onConnecting");
+        Log.i( "onConnecting");
         tv_status.setText("连接中....");
     }
 
     @Override
     public void onConnected() {
-        Log.i(TAG, "onConnected");
+        Log.i( "onConnected");
         tv_status.setText("on conected");
 
     }
@@ -99,15 +95,15 @@ public class Mefragment extends BaseFragment implements ClientHandler.IMEventLis
     @Override
     public void onDisconnected(boolean isException) {
         tv_status.setText("on disconnected");
-        Log.i(TAG, "onDisconnected");
+        Log.i( "onDisconnected");
     }
 
 
     @Override
     public void onSendFailure(Message.Data.Builder msg) {
-        Log.i(TAG, "onSendFailure");
+        Log.i( "onSendFailure");
         if (msg.getCmd() == Message.Data.Cmd.LOGIN_VALUE) {
-            Log.i(TAG, "登录失败");
+            Log.i( "登录失败");
         } else if (msg.getCmd() == Message.Data.Cmd.CHAT_MSG_VALUE) {
 
         }
@@ -115,21 +111,21 @@ public class Mefragment extends BaseFragment implements ClientHandler.IMEventLis
 
     @Override
     public void onSendSucceed(Message.Data.Builder msg) {
-        Log.i(TAG, "onSendSucceed cmd [" + msg.getCmd());
+        Log.i( "onSendSucceed cmd [" + msg.getCmd());
         if (msg.getCmd() == Message.Data.Cmd.LOGIN_VALUE) {
-            Log.i(TAG, "1".equals(msg.getContent()) ? "登录成功" : "登录失败:" + msg.getContent());
+            Log.i( "1".equals(msg.getContent()) ? "登录成功" : "登录失败:" + msg.getContent());
             if ("1".equals(msg.getContent())) {
                 login_status.setText("已登录");
             }
         } else if (msg.getCmd() == Message.Data.Cmd.CHAT_MSG_ECHO_VALUE) {
-            Log.i(TAG, "发送成功");
+            Log.i( "发送成功");
 
         }
     }
 
     @Override
     public void onConnectFailure(String msg) {
-        Log.i(TAG, "onConnectFailure" + msg);
+        Log.i( "onConnectFailure" + msg);
         tv_status.setText("连接失败....");
 
     }
@@ -166,7 +162,7 @@ public class Mefragment extends BaseFragment implements ClientHandler.IMEventLis
                 break;
 //            case R.id.bt_send_message:
 //
-//                Log.i(TAG, "发送");
+//                Log.i( "发送");
 //                sentcont++;
 //                Message.Data.Builder msg = Message.Data.newBuilder();
 //                msg.setCmd(Message.Data.Cmd.CHAT_MSG_VALUE);
@@ -174,7 +170,7 @@ public class Mefragment extends BaseFragment implements ClientHandler.IMEventLis
 //                msg.setContent("第" + sentcont + "发送");
 //                IMClient.instance().sendMessage(msg);
 //                Message.Data sdata = msg.build();
-//                Log.i(TAG, "send data content:" + sdata.getContent());
+//                Log.i( "send data content:" + sdata.getContent());
 //                break;
         }
     }

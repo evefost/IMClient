@@ -6,7 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.util.Log;
+import com.xy.util.Log;
 
 import com.example.xie.ClientApplication;
 import com.im.sdk.protocal.Message;
@@ -18,7 +18,6 @@ public class HeartBeatManager {
     private final String ACTION_SENDING_HEARTBEAT = "com.custom.protocal.im.heart.break";
     // 心跳检测4分钟检测一次，并且发送心跳包
     // 服务端自身存在通道检测，5分钟没有数据会主动断开通道
-    public String TAG = getClass().getSimpleName();
     private Context context = ClientApplication.instance();
     private PendingIntent pendingIntent;
     /**
@@ -29,7 +28,7 @@ public class HeartBeatManager {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(ACTION_SENDING_HEARTBEAT)) {
-                Log.d(TAG, "发送心跳包");
+                Log.d( "发送心跳包");
                 Message.Data.Builder data = Message.Data.newBuilder();
                 data.setCmd(Message.Data.Cmd.HEARTBEAT_VALUE);
                 IMClient.instance().sendMessage(data);
@@ -49,40 +48,40 @@ public class HeartBeatManager {
 
     // 登陆成功之后
     public void startHeartBeat() {
-        Log.w(TAG, "定时启动心跳 ,周期[" + HEARTBEAT_INTERVAL);
+        Log.w( "定时启动心跳 ,周期[" + HEARTBEAT_INTERVAL);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_SENDING_HEARTBEAT);
         context.registerReceiver(imReceiver, intentFilter);
         //获取AlarmManager系统服务
         if (pendingIntent == null) {
-            Log.w(TAG, "heartbeat#fill in pendingintent");
+            Log.w( "heartbeat#fill in pendingintent");
             Intent intent = new Intent(ACTION_SENDING_HEARTBEAT);
             pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
             if (pendingIntent == null) {
-                Log.w(TAG, "heartbeat#scheduleHeartbeat#pi is null");
+                Log.w( "heartbeat#scheduleHeartbeat#pi is null");
                 return;
             }
         }
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         am.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + HEARTBEAT_INTERVAL, HEARTBEAT_INTERVAL, pendingIntent);
-        Log.i(TAG, "已启动心跳");
+        Log.i( "已启动心跳");
     }
 
     public void reset() {
-        Log.d(TAG, "heartbeat#reset begin");
+        Log.d( "heartbeat#reset begin");
         try {
             context.unregisterReceiver(imReceiver);
             cancelHeartbeatTimer();
-            Log.d(TAG, "heartbeat#reset stop");
+            Log.d( "heartbeat#reset stop");
         } catch (Exception e) {
-            Log.e(TAG, "heartbeat#reset error:%s", e.getCause());
+            Log.e( "heartbeat#reset error:%s", e.getCause());
         }
     }
 
     public void cancelHeartbeatTimer() {
-        Log.w(TAG, "cancelHeartbeatTimer");
+        Log.w( "cancelHeartbeatTimer");
         if (pendingIntent == null) {
-            Log.w(TAG, "heartbeat#pi is null");
+            Log.w( "heartbeat#pi is null");
             return;
         }
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

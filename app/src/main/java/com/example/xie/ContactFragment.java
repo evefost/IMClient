@@ -23,12 +23,12 @@ import java.util.UUID;
 /**
  * Created by xie on 2016/2/25.
  */
-public class UserListFragment extends BaseFragment implements ClientHandler.IMEventListener {
+public class ContactFragment extends BaseFragment implements ClientHandler.IMEventListener {
     private  String TAG = getClass().getSimpleName();
 
     @Override
     public int getLayoutId() {
-        return R.layout.online_user_list_layout;
+        return R.layout.contact_layout;
     }
 
     private RecyclerView rcView;
@@ -45,6 +45,7 @@ public class UserListFragment extends BaseFragment implements ClientHandler.IMEv
     public void init(Bundle savedInstanceState) {
 
         setTitle("联系人");
+        enableBack(false);
         IMClient.addEventListener(this);
         mAdapter = new RcAdater();
         rcView.setLayoutManager(new LinearLayoutManager(mActivity));

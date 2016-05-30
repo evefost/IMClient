@@ -17,6 +17,8 @@ import com.example.xie.ClientApplication;
 import com.example.xie.imclient.R;
 import com.im.sdk.core.IMClient;
 
+import butterknife.ButterKnife;
+
 /**
  * Created by mis on 2016/2/17.
  */
@@ -60,7 +62,7 @@ public abstract class BaseFragment extends Fragment implements PageInterface {
 
         View mView = inflater.inflate(getLayoutId(), container, false);
         mContentView.addView(mView);
-
+        ButterKnife.inject(this, mContentView);
         initHeaderView();
         findViews();
         return mContentView;
@@ -82,12 +84,26 @@ public abstract class BaseFragment extends Fragment implements PageInterface {
         return mContentView.findViewById(id);
     }
 
+    public void enableBack(boolean enable){
+        if(rl_left != null){
+            rl_left.setVisibility(enable?View.VISIBLE:View.INVISIBLE);
+        }
+    }
+
     @Override
     public void findViews() {
 
     }
     @Override
     public void setListeners() {
+        if(rl_left != null){
+            rl_left.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getActivity().finish();
+                }
+            });
+        }
     }
     @Override
     public void hideTopBar(boolean flag){
@@ -110,7 +126,11 @@ public abstract class BaseFragment extends Fragment implements PageInterface {
 
     }
 
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
+    }
 
 
 

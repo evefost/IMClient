@@ -17,7 +17,8 @@ package com.im.sdk.core;
 
 import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
+
+import com.xy.util.Log;
 
 import com.example.xie.ClientApplication;
 import com.example.xie.Constants;
@@ -42,7 +43,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
-
 /***
  * 处理所有的消息处事件
  */
@@ -56,7 +56,6 @@ public final class IMClient implements ClientHandler.IMEventListener {
      */
     private static final List<ClientHandler.IMEventListener> mIMEventListener = new ArrayList<>();
     private static IMClient mInstance;
-    public String TAG = getClass().getSimpleName();
     private int connect_status = STATU_DISCONNECT;
     private MessageHandler mMessageHandler;
     private Context context = ClientApplication.instance();
@@ -71,6 +70,7 @@ public final class IMClient implements ClientHandler.IMEventListener {
     private IMClient(Context ctx) {
         init();
     }
+
     public static void init(Context ctx) {
         if (mInstance == null) {
             mInstance = new IMClient(ctx);
@@ -94,7 +94,7 @@ public final class IMClient implements ClientHandler.IMEventListener {
     }
 
     private void init() {
-        Log.i(TAG, "init...");
+        Log.i("init...");
         executor = Executors.newCachedThreadPool();
         mUIhander = new Handler();
         handler = new ClientHandler(this);
@@ -117,7 +117,7 @@ public final class IMClient implements ClientHandler.IMEventListener {
     }
 
     public boolean reconnect() {
-        if(reconectTimes>0){
+        if (reconectTimes > 0) {
             connect();
             return true;
         }
@@ -129,11 +129,11 @@ public final class IMClient implements ClientHandler.IMEventListener {
             @Override
             public void run() {
                 if (channel != null && channel.isActive()) {
-                    Log.i(TAG, "server aready connected");
+                    Log.i("server aready connected");
                     connect_status = STATU_CONNECTED;
                     return;
                 }
-                Log.i(TAG, "start connect server:" + Constants.SOCKET_HOST);
+                Log.i("start connect server:" + Constants.SOCKET_HOST);
                 ChannelFuture f;
                 try {
                     connect_status = STATU_CONNECTING;
@@ -142,7 +142,7 @@ public final class IMClient implements ClientHandler.IMEventListener {
                     f.addListener(new ChannelFutureListener() {
                         @Override
                         public void operationComplete(ChannelFuture channelFuture) throws Exception {
-                            Log.w(TAG, "bind server result:" + (channelFuture.isSuccess() ? "successfut" : "failure:" + channelFuture.cause().toString()));
+                            Log.w("bind server result:" + (channelFuture.isSuccess() ? "successfut" : "failure:" + channelFuture.cause().toString()));
                         }
                     });
                     channel = f.channel();
@@ -150,17 +150,16 @@ public final class IMClient implements ClientHandler.IMEventListener {
                     f.channel().closeFuture().sync();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Log.i(TAG, "connect EX" + e.toString());
+                    Log.i("connect EX" + e.toString());
                     connect_status = STATU_DISCONNECT;
                     onConnectFailure(e.toString());
                 } finally {
                     // Shut down the event loop to terminate all threads.
-                    Log.i(TAG, " Shut down the event loop to terminate all threads.");
+                    Log.i(" Shut down the event loop to terminate all threads.");
                     //loopGroup.shutdownGracefully();
                 }
             }
         });
-
 
     }
 
@@ -186,8 +185,8 @@ public final class IMClient implements ClientHandler.IMEventListener {
 
     @Override
     public void onReceiveMessage(final Message.Data message) {
-        Log.i(TAG, " onReceiveMessage ");
-        notifyListener(false,message, EVENT_RECEIVE_MESSAGE);
+        Log.i(" onReceiveMessage ");
+        notifyListener(false, message, EVENT_RECEIVE_MESSAGE);
     }
 
     @Override
@@ -195,36 +194,36 @@ public final class IMClient implements ClientHandler.IMEventListener {
         HeartBeatManager.instance().startHeartBeat();
         reconectTimes = 3;
         connect_status = STATU_CONNECTED;
-        Log.i(TAG, " onConnected ");
-        notifyListener(false,null, EVENT_CONNECTED);
+        Log.i(" onConnected ");
+        notifyListener(false, null, EVENT_CONNECTED);
         mMessageHandler.onConnected(channel);
     }
 
     @Override
     public void onDisconnected(boolean isException) {
         HeartBeatManager.instance().reset();
-        Log.i(TAG, "onDisconnected ");
+        Log.i("onDisconnected ");
         connect_status = STATU_DISCONNECT;
-        notifyListener(isException,null, EVENT_DISCONNECTED);
-        if(isException){
+        notifyListener(isException, null, EVENT_DISCONNECTED);
+        if (isException) {
             reconnect();
         }
     }
 
     @Override
     public void onSendFailure(Message.Data.Builder msg) {
-        notifyListener(false,msg, EVENT_SEND_FAILURE);
+        notifyListener(false, msg, EVENT_SEND_FAILURE);
     }
 
     @Override
     public void onSendSucceed(Message.Data.Builder msg) {
-        notifyListener(false,msg, EVENT_SEND_SUCCESS);
+        notifyListener(false, msg, EVENT_SEND_SUCCESS);
     }
 
     @Override
     public void onConnectFailure(String msg) {
         reconectTimes--;
-        notifyListener(false,msg, EVENT_CONNECT_FAILURE);
+        notifyListener(false, msg, EVENT_CONNECT_FAILURE);
     }
 
     @Override
@@ -244,25 +243,25 @@ public final class IMClient implements ClientHandler.IMEventListener {
             public void run() {
                 for (ClientHandler.IMEventListener listener : mIMEventListener) {
                     if (event == EVENT_CONNECTED) {
-                        Log.i(TAG, "连接成功能");
+                        Log.i("连接成功能");
                         listener.onConnected();
                     } else if (event == EVENT_DISCONNECTED) {
-                        Log.i(TAG, "服务器已断开");
+                        Log.i("服务器已断开");
                         listener.onDisconnected(isException);
                     } else if (event == EVENT_RECEIVE_MESSAGE) {
-                        Log.i(TAG, "收到消息，处理各类消息");
+                        Log.i("收到消息，处理各类消息");
                         mMessageHandler.proccessReceiveMsg((Message.Data) message, listener);
                     } else if (event == EVENT_SEND_FAILURE) {
-                        Log.i(TAG, "发送失败");
+                        Log.i("发送失败");
                         listener.onSendFailure((Message.Data.Builder) message);
                     } else if (event == EVENT_SEND_SUCCESS) {
-                        Log.i(TAG, "发送成功");
+                        Log.i("发送成功");
                         listener.onSendSucceed((Message.Data.Builder) message);
                     } else if (event == EVENT_CONNECT_FAILURE) {
-                        Log.i(TAG, "连接失败" + message.toString());
+                        Log.i("连接失败" + message.toString());
                         listener.onConnectFailure((String) message);
                     } else if (event == EVENT_CONNECT_ING) {
-                        Log.i(TAG, "连接中...");
+                        Log.i("连接中...");
                         listener.onConnecting();
                     }
                 }

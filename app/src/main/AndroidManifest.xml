@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.xie.imclient">
+          package="com.example.xie.imclient">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
@@ -17,32 +17,23 @@
         <!--base on this screen -->
         <meta-data
             android:name="design_width"
-            android:value="1080" />
+            android:value="1080"/>
         <meta-data
             android:name="design_height"
-            android:value="1920" />
+            android:value="1920"/>
         <!---->
-
         <activity
             android:name="com.example.xie.MainActivity"
-            android:configChanges="keyboard|keyboardHidden"
+            android:configChanges="keyboard|keyboardHidden|locale|mcc|mnc|orientation|screenSize|screenLayout"
             android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <!--<activity-->
-            <!--android:name="com.example.xie.DemoActivity"-->
-            <!--android:label="@string/app_name">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN"/>-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
-            <!--</intent-filter>-->
-        <!--</activity>-->
-        <activity android:name="com.im.ui.ChatActivity" />
+        <activity android:name="com.im.ui.ChatActivity"/>
 
     </application>
 

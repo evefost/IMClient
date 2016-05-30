@@ -39,9 +39,8 @@ public class MainActivity extends BaseActivity {
     public void init(Bundle savedInstanceState) {
         hideTopBar(true);
         mTabManager = new FragmentTabManager(this, getSupportFragmentManager(), R.id.container);
-        mTabManager
-                .addTab(TAB_CHAT, HomeFragment.class, null)
-                .addTab(TAB_CONTACT, UserListFragment.class, null)
+        mTabManager.addTab(TAB_CHAT, RecentFragment.class, null)
+                .addTab(TAB_CONTACT, ContactFragment.class, null)
                 .addTab(TAB_ME, Mefragment.class, null);
         mTabManager.changeTab(TAB_CHAT);
         mTvChat.setSelected(true);
@@ -53,6 +52,7 @@ public class MainActivity extends BaseActivity {
                 mTvMe.setSelected(TAB_ME.equals(tabId));
             }
         });
+        //setSwipeBackEnable(false);
     }
 
     @OnClick({
